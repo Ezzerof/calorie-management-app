@@ -20,12 +20,19 @@ public class MainPage extends AllUsers {
                     System.out.println("Welcome, " + name);
                     String username = isUsernameValid();
                     int age = isAgeValid();
+                    double weight = isWeightValid();
+                    double height = isHeightValid();
+                    double fatPercentage = isFatPercentageValid();
+                    String userGoal = userGoalValidation();
 
-                    User user = new User(name, username, age, 23, 21, 23, "Ananas");
+                    User user = new User(name, username, age, weight, height, fatPercentage, userGoal);
                     existingUsers.add(user);
-
                     break;
                 case 2:
+                    if (checkingLogInDetails()) {
+                        System.out.println("Logged in");
+                        continue;
+                    }
                     break;
                 case 3:
                     System.out.println("App is quiting...");
@@ -65,6 +72,28 @@ public class MainPage extends AllUsers {
         return name;
     }
 
+    private boolean checkingLogInDetails() {
+        boolean isOn = true;
+
+        while (isOn) {
+            System.out.print("Please enter your username: ");
+            String input = scanner.next();
+
+            if (SavedUsernames.contains(input)) {
+                for (User user: existingUsers) {
+                    if (user.getUsername().equals(input)) {
+                        System.out.println("Welcome back, " + user.getName());
+                        return true;
+                    }
+                }
+            } else {
+                System.out.println("You are not registered.");
+                isOn = false;
+            }
+        }
+        return false;
+    }
+
     private String isUsernameValid() {
 
         boolean validUsername = true;
@@ -100,6 +129,88 @@ public class MainPage extends AllUsers {
         }
 
         return tempAge;
+    }
+
+    private double isWeightValid() {
+        boolean isOn = true;
+        double weight = 0;
+
+        while (isOn) {
+            System.out.print("Enter your weight: ");
+            double input = scanner.nextDouble();
+
+            if (input < 20 || input > 200) {
+                System.out.println("Invalid weight.");
+            } else {
+                weight = input;
+                isOn = false;
+            }
+        }
+        return weight;
+    }
+
+    private double isHeightValid() {
+        boolean isOn = true;
+        double height = 0;
+
+        while (isOn) {
+            System.out.print("Enter your height(example 1.87): ");
+            double input = scanner.nextDouble();
+            if (input < 1 || input > 2.3) {
+                System.out.println("Invalid height.");
+            } else {
+                height = input;
+                isOn = false;
+            }
+        }
+        return height;
+    }
+
+    private double isFatPercentageValid() {
+        boolean isOn = true;
+        double fat = 0;
+
+        while (isOn) {
+            System.out.print("Enter your fat percentage: ");
+            double input = scanner.nextDouble();
+            if (input < 1 || input > 90) {
+                System.out.println("Invalid fat percentage.");
+            } else {
+                fat = input;
+                isOn = false;
+            }
+        }
+        return fat;
+    }
+
+    private String userGoalValidation() {
+        boolean isOn = true;
+        String goal = "";
+
+        while (isOn) {
+            System.out.print("\n1)Loose weight \n2)Gain weight \n3)Maintain weight\nPlease select what is your goal: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    goal = "Loose weight";
+                    isOn = false;
+                    break;
+                case 2:
+                    goal = "Gain weight";
+                    isOn = false;
+                    break;
+                case 3:
+                    goal = "Maintain weight";
+                    isOn = false;
+                    break;
+                default:
+                    System.out.println("Invalid input.");
+            }
+            System.out.println();
+        }
+
+        return goal;
     }
 
 }
