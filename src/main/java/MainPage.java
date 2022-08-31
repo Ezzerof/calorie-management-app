@@ -30,8 +30,26 @@ public class MainPage extends AllUsers {
                     break;
                 case 2:
                     if (checkingLogInDetails()) {
-                        System.out.println("Logged in");
-                        continue;
+                        System.out.println("1. Add to product/meal to your daily diary.\n" +
+                                "2. Remove product/meal from your daily diary.\n" +
+                                "3. Check your daily sum up.\n" +
+                                "4. Edit profile\n" +
+                                "5. Log out and go back to main menu.\n");
+                        System.out.print("Please select a function from above: ");
+                        int function = scanner.nextInt();
+
+                        switch (function) {
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                break;
+                            case 5:
+                                break;
+                        }
                     }
                     break;
                 case 3:
