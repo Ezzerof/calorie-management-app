@@ -13,6 +13,7 @@ public class MainPage extends AllUsers {
         while (isOn) {
             System.out.print("1. Sign in\n2. Log in\n3. Quit\nPlease select a function from above: ");
             int choice = scanner.nextInt();
+            User tempUser;
 
             switch (choice) {
                 case 1:
@@ -29,7 +30,14 @@ public class MainPage extends AllUsers {
                     existingUsers.add(user);
                     break;
                 case 2:
-                    if (checkingLogInDetails()) {
+                    System.out.print("Please enter your username: ");
+                    String input = scanner.next();
+                    if (checkingLogInDetails(input)) {
+                        for (User u: existingUsers) {
+                            if (u.getName().equals(input)) {
+                                tempUser = u;
+                            }
+                        }
                         System.out.println("1. Add to product/meal to your daily diary.\n" +
                                 "2. Remove product/meal from your daily diary.\n" +
                                 "3. Check your daily sum up.\n" +
@@ -40,6 +48,24 @@ public class MainPage extends AllUsers {
 
                         switch (function) {
                             case 1:
+                                boolean turnOn = true;
+
+                                while (turnOn) {
+                                    System.out.println("1. What product/ how many grams.\n2. Remove existing product/meal\n3. Add new product to database.\n4. Quit\n");
+                                    System.out.print("Please select an option from above: ");
+                                    int option = scanner.nextInt();
+                                    switch (option) {
+                                        case 1:
+                                            tempUser.setProduct()
+                                            break;
+                                        case 2:
+                                            break;
+                                        case 3:
+                                            break;
+                                        case 4:
+                                            break;
+                                    }
+                                }
                                 break;
                             case 2:
                                 break;
@@ -90,17 +116,15 @@ public class MainPage extends AllUsers {
         return name;
     }
 
-    private boolean checkingLogInDetails() {
+    private boolean checkingLogInDetails(String uName) {
         boolean isOn = true;
 
         while (isOn) {
-            System.out.print("Please enter your username: ");
-            String input = scanner.next();
 
-            if (SavedUsernames.contains(input)) {
-                for (User user: existingUsers) {
-                    if (user.getUsername().equals(input)) {
-                        System.out.println("Welcome back, " + user.getName());
+            if (SavedUsernames.contains(uName)) {
+                for (User u: existingUsers) {
+                    if (u.getUsername().equals(uName)) {
+                        System.out.println("Welcome back, " + u.getName());
                         return true;
                     }
                 }
