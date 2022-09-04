@@ -1,38 +1,45 @@
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class User {
 
     private String name;
     private String username;
     private int userAge;
-    private ArrayList<Double> userWeight;
-    private ArrayList<Double> userHeight;
-    private ArrayList<Double> userFatPercentage;
+    private double userWeight;
+    private double userHeight;
+    private double userFatPercentage;
     private String userGoal;
 
-    private ArrayList<String> breakfast;
-    private ArrayList dinner;
-    private ArrayList lunch;
-    private ArrayList snackFirst;
-    private ArrayList snackSecond;
-    private String[] product;
+    private Map<String, List<Double>> breakfast;
+    private Map<String, List<Double>> dinner;
+    private Map<String, List<Double>> lunch;
+    private Map<String, List<Double>> snackFirst;
+    private Map<String, List<Double>> snackSecond;
+    private List<Double> product;
 
 
     public User(String name, String username, int userAge, double userWeight, double userHeight, double userFatPercentage, String userGoal) {
         this.name = name;
         this.username = username;
         this.userAge = userAge;
-        this.userWeight = new ArrayList<>();
         addUserWeight(userWeight);
-        this.userHeight = new ArrayList<>();
         addUserHeight(userHeight);
-        this.userFatPercentage = new ArrayList<>();
         addUserFatPercentage(userFatPercentage);
         this.userGoal = userGoal;
     }
 
-    protected String[] setProduct(String prodName, String grams, String kcal, String fats, String carbs, String proteins) {
-        return new String[]{prodName, grams, kcal, fats, carbs, proteins};
+    protected void setProduct(Double grams, Double kcal, Double fats, Double carbs, Double proteins) {
+        product.add(grams);
+        product.add(kcal);
+        product.add(fats);
+        product.add(carbs);
+        product.add(proteins);
+    }
+
+    public List<Double> getProduct() {
+        return this.product;
     }
 
     public String getName() {
@@ -47,27 +54,27 @@ public class User {
         return userAge;
     }
 
-    public ArrayList<Double> getUserWeight() {
+    public double getUserWeight() {
         return userWeight;
     }
 
     public void addUserWeight(double weight) {
-        this.userWeight.add(weight);
+        this.userWeight = weight;
     }
 
     public void addUserHeight(double height) {
-        this.userHeight.add(height);
+        this.userHeight = height;
     }
 
-    public ArrayList<Double> getUserHeight() {
+    public double getUserHeight() {
         return userHeight;
     }
 
     public void addUserFatPercentage(double fat) {
-        this.userFatPercentage.add(fat);
+        this.userFatPercentage = fat;
     }
 
-    public ArrayList<Double> getUserFatPercentage() {
+    public double getUserFatPercentage() {
         return userFatPercentage;
     }
 
