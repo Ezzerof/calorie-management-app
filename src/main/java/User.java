@@ -10,7 +10,7 @@ public class User {
     private ArrayList<Double> userFatPercentage;
     private String userGoal;
 
-    private ArrayList breakfast;
+    private ArrayList<String> breakfast;
     private ArrayList dinner;
     private ArrayList lunch;
     private ArrayList snackFirst;
