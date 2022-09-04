@@ -6,12 +6,13 @@ public class MainPage {
 
     private UserRepository userRepository = new UserRepository();
 
-    private static Set<String> SavedUsernames = new HashSet<>();
+    private static Set<String> savedUsernames = new HashSet<>();
     Scanner scanner = new Scanner(System.in);
 
     public void startApp() {
         boolean isOn = true;
 
+        //Outter while
         while (isOn) {
             System.out.print("1. Sign in\n2. Log in\n3. Quit\nPlease select a function from above: ");
             int choice = scanner.nextInt();
@@ -34,27 +35,23 @@ public class MainPage {
                 case 2:
                     System.out.print("Please enter your username: ");
                     String input = scanner.next();
-                    if ()
+                    if (savedUsernames.contains(input)) {
 
-                    if (checkingLogInDetails(input)) {
-                        for (User u: existingUsers) {
-                            if (u.getName().equals(input)) {
-                                tempUser = u;
-                            }
-                        }
-                        System.out.println("1. Add to product/meal to your daily diary.\n" +
-                                "2. Remove product/meal from your daily diary.\n" +
-                                "3. Check your daily sum up.\n" +
-                                "4. Edit profile\n" +
-                                "5. Log out and go back to main menu.\n");
-                        System.out.print("Please select a function from above: ");
-                        int function = scanner.nextInt();
+                        boolean isOn2 = true;
 
-                        switch (function) {
-                            case 1:
+                        while (isOn2) {
 
+                            tempUser = userRepository.getUserByUsername(input);
+                            System.out.println("1. Add to product/meal to your daily diary.\n" +
+                                    "2. Remove product/meal from your daily diary.\n" +
+                                    "3. Check your daily sum up.\n" +
+                                    "4. Edit profile\n" +
+                                    "5. Log out and go back to main menu.\n");
+                            System.out.print("Please select a function from above: ");
+                            int function = scanner.nextInt();
 
-
+                            switch (function) {
+                                case 1:
 
 //                                boolean turnOn = true;
 //
@@ -71,15 +68,39 @@ public class MainPage {
 //                                        case 3:
 //                                            break;
 //                                        case 4:
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                break;
-                            case 4:
-                                break;
-                            case 5:
-                                break;
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    break;
+                                case 4:
+                                    boolean isOn3 = true;
+                                    while (isOn3) {
+                                        System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Quit" +
+                                                "\nPlease select from above: ");
+                                        int select = scanner.nextInt();
+                                        switch (select) {
+                                            case 1:
+                                                System.out.println("Your current weight is: " + tempUser.getUserWeight());
+                                                System.out.print("\nPlease enter your new weight: ");
+                                                double newWeight = isWeightValid();
+
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                isOn3 = false;
+                                        }
+                                    }
+
+                                    break;
+                                case 5:
+                                    tempUser = null;
+                                    isOn2 = false;
+                                    break;
+                            }
                         }
                     }
                     break;
@@ -121,26 +142,6 @@ public class MainPage {
         return name;
     }
 
-    private boolean checkingLogInDetails(String uName) {
-        boolean isOn = true;
-
-        while (isOn) {
-
-            if (SavedUsernames.contains(uName)) {
-                for (User u: existingUsers) {
-                    if (u.getUsername().equals(uName)) {
-                        System.out.println("Welcome back, " + u.getName());
-                        return true;
-                    }
-                }
-            } else {
-                System.out.println("You are not registered.");
-                isOn = false;
-            }
-        }
-        return false;
-    }
-
     private String isUsernameValid() {
 
         boolean validUsername = true;
@@ -149,10 +150,10 @@ public class MainPage {
         while (validUsername) {
             System.out.print("Enter your username: ");
             String username = scanner.next();
-            if (SavedUsernames.contains(username)) {
+            if (savedUsernames.contains(username)) {
                 System.out.println("Username already exist!");
             } else {
-                SavedUsernames.add(username);
+                savedUsernames.add(username);
                 tempUsername = username;
                 validUsername = false;
             }
