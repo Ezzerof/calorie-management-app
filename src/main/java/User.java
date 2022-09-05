@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class User {
 
@@ -11,6 +8,7 @@ public class User {
     private double userHeight;
     private double userFatPercentage;
     private String userGoal;
+    private DishesRepository dishesRepository;
 
 
     public User(String name, String username, int userAge, double userWeight, double userHeight, double userFatPercentage, String userGoal) {
@@ -21,6 +19,7 @@ public class User {
         addUserHeight(userHeight);
         addUserFatPercentage(userFatPercentage);
         this.userGoal = userGoal;
+        dishesRepository = new DishesRepository();
     }
 
 

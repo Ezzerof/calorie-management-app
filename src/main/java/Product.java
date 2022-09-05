@@ -2,15 +2,15 @@ public class Product {
 
     private String name;
     private double grams;
-    private double kcals;
+    private double kcal;
     private double fats;
     private double carbs;
     private double proteins;
 
-    public Product(String name, double grams, double kcals, double fats, double carbs, double proteins) {
+    public Product(String name, double grams, double kcal, double fats, double carbs, double proteins) {
         this.name = name;
         this.grams = grams;
-        this.kcals = kcals;
+        this.kcal = kcal;
         this.fats = fats;
         this.carbs = carbs;
         this.proteins = proteins;
@@ -24,8 +24,8 @@ public class Product {
         return grams;
     }
 
-    public double getKcals() {
-        return kcals;
+    public double getKcal() {
+        return kcal;
     }
 
     public double getFats() {
@@ -44,8 +44,8 @@ public class Product {
         this.grams = grams;
     }
 
-    public void setKcals(double kcals) {
-        this.kcals = kcals;
+    public void setKcal(double kcal) {
+        this.kcal = kcal;
     }
 
     public void setFats(double fats) {

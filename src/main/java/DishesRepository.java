@@ -7,8 +7,7 @@ public class DishesRepository {
     private Map<Date, Product> breakfast = new HashMap<>();
     private Map<Date, Product> dinner = new HashMap<>();
     private Map<Date, Product> lunch = new HashMap<>();
-    private Map<Date, Product> firstSnack = new HashMap<>();
-    private Map<Date, Product> secondSnack = new HashMap<>();
+    private Map<Date, Product> snack = new HashMap<>();
 
 
     protected void addProduct(Map<Date, Product> map, Product product, Date date) {
