@@ -12,13 +12,6 @@ public class User {
     private double userFatPercentage;
     private String userGoal;
 
-    private Map<String, List<Double>> breakfast;
-    private Map<String, List<Double>> dinner;
-    private Map<String, List<Double>> lunch;
-    private Map<String, List<Double>> snackFirst;
-    private Map<String, List<Double>> snackSecond;
-    private List<Double> product;
-
 
     public User(String name, String username, int userAge, double userWeight, double userHeight, double userFatPercentage, String userGoal) {
         this.name = name;
@@ -30,17 +23,7 @@ public class User {
         this.userGoal = userGoal;
     }
 
-    protected void setProduct(Double grams, Double kcal, Double fats, Double carbs, Double proteins) {
-        product.add(grams);
-        product.add(kcal);
-        product.add(fats);
-        product.add(carbs);
-        product.add(proteins);
-    }
 
-    public List<Double> getProduct() {
-        return this.product;
-    }
 
     public String getName() {
         return name;

@@ -84,11 +84,22 @@ public class MainPage {
                                                 System.out.println("Your current weight is: " + tempUser.getUserWeight());
                                                 System.out.print("\nPlease enter your new weight: ");
                                                 double newWeight = isWeightValid();
-
+                                                tempUser.addUserWeight(newWeight);
+                                                System.out.println("Your new weight is: " + tempUser.getUserWeight());
                                                 break;
                                             case 2:
+                                                System.out.println("Your current height is: " + tempUser.getUserHeight());
+                                                System.out.print("\nPlease enter your new height: ");
+                                                double newHeight = isHeightValid();
+                                                tempUser.addUserHeight(newHeight);
+                                                System.out.println("Your new height is: " + tempUser.getUserHeight());
                                                 break;
                                             case 3:
+                                                System.out.println("Your current fat percentage is: " + tempUser.getUserFatPercentage());
+                                                System.out.print("\nPlease enter your new fat percentage: ");
+                                                double newFatPercentage = isFatPercentageValid();
+                                                tempUser.addUserFatPercentage(newFatPercentage);
+                                                System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage());
                                                 break;
                                             case 4:
                                                 isOn3 = false;
