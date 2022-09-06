@@ -79,7 +79,7 @@ public class MainPage {
 //                                                    for (Product p : user.getDishesRepository().getList()) {
 //
 //                                                    }
-                                                    
+
                                                     break;
                                                 case 2:
                                                     break;
