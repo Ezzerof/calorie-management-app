@@ -76,7 +76,9 @@ public class MainPage {
                                             switch (uChoice) {
                                                 case 1:
                                                     int i = 1;
-                                                    for (Product p : user.getDishesRepository().getList())
+//                                                    for (Product p : user.getDishesRepository().getList()) {
+//
+//                                                    }
                                                     
                                                     break;
                                                 case 2:
