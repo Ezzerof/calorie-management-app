@@ -60,5 +60,7 @@ public class User {
         return userFatPercentage;
     }
 
-
+    public DishesRepository getDishesRepository() {
+        return dishesRepository;
+    }
 }

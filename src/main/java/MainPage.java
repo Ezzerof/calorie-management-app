@@ -1,9 +1,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class MainPage {
 
@@ -70,15 +67,23 @@ public class MainPage {
                                         System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
 
-                                        if (userChoice == 1) {
-
-                                        }
-
                                         boolean isOn5 = true;
                                         while (isOn5) {
                                             System.out.println("1. Select existing product/meal.\n2. Remove existing product/meal\n3. Add new product to database.");
                                             System.out.print("Enter the option: ");
                                             int uChoice = scanner.nextInt();
+
+                                            switch (uChoice) {
+                                                case 1:
+                                                    int i = 1;
+                                                    for (Product p : user.getDishesRepository().getList())
+                                                    
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                            }
 
                                         }
 
