@@ -1,6 +1,6 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class MainPage {
 
@@ -52,14 +52,53 @@ public class MainPage {
 
                             switch (function) {
                                 case 1:
+                                    boolean isOn3 = true;
+                                    while (isOn3) {
+                                        System.out.print("Please enter the date(ex: 13/09/1999): ");
+                                        String tempDate = scanner.nextLine();
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                        Date date = null;
+                                        try {
+                                            //Parsing the String
+                                            date = sdf.parse(tempDate);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\nEnter the option: ");
+                                        int userChoice = scanner.nextInt();
+
+                                        boolean isOn5 = true;
+                                        while (isOn5) {
+                                            System.out.println("1. Select existing product/meal.\n2. Remove existing product/meal\n3. Add new product to database.");
+                                            System.out.print("Enter the option: ");
+                                            int uChoice = scanner.nextInt();
+
+                                            switch (uChoice) {
+                                                case 1:
+                                                    int i = 1;
+//                                                    for (Product p : user.getDishesRepository().getList()) {
+//
+//                                                    }
+
+                                                    break;
+                                                case 2:
+                                                    break;
+                                                case 3:
+                                                    break;
+                                            }
+
+                                        }
+
+
+                                    }
                                     break;
                                 case 2:
                                     break;
                                 case 3:
                                     break;
                                 case 4:
-                                    boolean isOn3 = true;
-                                    while (isOn3) {
+                                    boolean isOn4 = true;
+                                    while (isOn4) {
                                         System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Quit" +
                                                 "\nPlease select from above: ");
                                         int select = scanner.nextInt();
@@ -86,7 +125,7 @@ public class MainPage {
                                                 System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage());
                                                 break;
                                             case 4:
-                                                isOn3 = false;
+                                                isOn4 = false;
                                         }
                                     }
 
