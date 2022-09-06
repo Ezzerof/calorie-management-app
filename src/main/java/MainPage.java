@@ -52,22 +52,6 @@ public class MainPage {
 
                             switch (function) {
                                 case 1:
-
-//                                boolean turnOn = true;
-//
-//                                while (turnOn) {
-//                                    System.out.println("1. What product/ how many grams.\n2. Remove existing product/meal\n3. Add new product to database.\n4. Quit\n");
-//                                    System.out.print("Please select an option from above: ");
-//                                    int option = scanner.nextInt();
-//                                    switch (option) {
-//                                        case 1:
-//                                            tempUser.setProduct()
-//                                            break;
-//                                        case 2:
-//                                            break;
-//                                        case 3:
-//                                            break;
-//                                        case 4:
                                     break;
                                 case 2:
                                     break;
