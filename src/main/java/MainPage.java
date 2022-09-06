@@ -1,5 +1,5 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+import java.time.LocalDate;
 import java.util.*;
 
 public class MainPage {
@@ -56,14 +56,11 @@ public class MainPage {
                                     while (isOn3) {
                                         System.out.print("Please enter the date(ex: 13/09/1999): ");
                                         String tempDate = scanner.nextLine();
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        Date date = null;
-                                        try {
-                                            //Parsing the String
-                                            date = sdf.parse(tempDate);
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
+                                        int day = Integer.parseInt(tempDate.substring(0,2));
+                                        int month = Integer.parseInt(tempDate.substring(3,5));
+                                        int year = Integer.parseInt(tempDate.substring(6));
+                                        LocalDate.of(day,month,year); // add
+
                                         System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
 
@@ -76,9 +73,19 @@ public class MainPage {
                                             switch (uChoice) {
                                                 case 1:
                                                     int i = 1;
-//                                                    for (Product p : user.getDishesRepository().getList()) {
-//
-//                                                    }
+                                                    if (user.getList().isEmpty()) {
+                                                        System.out.println("List is empty");
+                                                        break;
+                                                    } else {
+                                                        for (Product p : user.getList()) {
+                                                            System.out.printf("%d. %s", i, p.getName());
+                                                            ++i;
+                                                        }
+                                                        System.out.print("\nPlease select the product number from above: ");
+                                                        int prodNum = scanner.nextInt() - 1;
+                                                        System.out.print("\nPlease enter how many grams: ");
+                                                        double grams = scanner.nextDouble();
+                                                    }
 
                                                     break;
                                                 case 2:

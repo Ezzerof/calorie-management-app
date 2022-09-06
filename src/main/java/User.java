@@ -1,3 +1,4 @@
+import java.util.*;
 
 public class User {
 
@@ -8,7 +9,7 @@ public class User {
     private double userHeight;
     private double userFatPercentage;
     private String userGoal;
-    private DishesRepository dishesRepository;
+    private List<Product> listOfProducts;
 
 
     public User(String name, String username, int userAge, double userWeight, double userHeight, double userFatPercentage, String userGoal) {
@@ -19,7 +20,7 @@ public class User {
         addUserHeight(userHeight);
         addUserFatPercentage(userFatPercentage);
         this.userGoal = userGoal;
-        dishesRepository = new DishesRepository();
+        listOfProducts = new ArrayList<>();
     }
 
 
@@ -60,7 +61,24 @@ public class User {
         return userFatPercentage;
     }
 
-    public DishesRepository getDishesRepository() {
-        return dishesRepository;
+    public List<Product> getList() {
+        return listOfProducts;
     }
+
+    protected void addProductToLOP(Product product) {
+        for (Product p: listOfProducts) {
+            if (!p.getName().equals(product.getName())) {
+                listOfProducts.add(product);
+            } else {
+                listOfProducts.add(listOfProducts.indexOf(p), product);
+            }
+        }
+    }
+
+    public void removeProductFromLOP(Product product) {
+        if (listOfProducts.contains(product)) {
+            listOfProducts.remove(product);
+        }
+    }
+
 }
