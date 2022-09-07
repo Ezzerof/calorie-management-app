@@ -1,4 +1,7 @@
+
 import java.util.*;
+
+
 
 public class User {
 
@@ -9,6 +12,10 @@ public class User {
     private double userHeight;
     private double userFatPercentage;
     private String userGoal;
+    private List<Product> breakfast;
+    private List<Product> snack;
+    private List<Product> lunch;
+    private List<Product> dinner;
     private List<Product> listOfProducts;
 
 
@@ -21,6 +28,10 @@ public class User {
         addUserFatPercentage(userFatPercentage);
         this.userGoal = userGoal;
         listOfProducts = new ArrayList<>();
+        breakfast = new ArrayList<>();
+        snack = new ArrayList<>();
+        lunch = new ArrayList<>();
+        dinner = new ArrayList<>();
     }
 
 
@@ -63,6 +74,28 @@ public class User {
 
     public List<Product> getList() {
         return listOfProducts;
+    }
+
+    public void addProductToMeal(Product product, String listName) {
+        getMeal(listName).add(product);
+    }
+
+    public List<Product> getMeal(String mealName) {
+        switch (mealName) {
+            case "breakfast":
+                return breakfast;
+            case "snack":
+                return snack;
+            case "lunch":
+                return lunch;
+            case "dinner":
+                return dinner;
+        }
+        return null;
+    }
+
+    protected void removeProductFromMeal(Product product, String mealName) {
+        getMeal(mealName).remove(product);
     }
 
     protected void addProductToLOP(Product product) {

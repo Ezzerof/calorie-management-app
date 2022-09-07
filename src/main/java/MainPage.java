@@ -55,16 +55,27 @@ public class MainPage {
                                     boolean isOn3 = true;
                                     while (isOn3) {
                                         System.out.print("Please enter the date(ex: 13/09/1999): ");
-                                        String tempDate = scanner.nextLine();
-                                        int day = Integer.parseInt(tempDate.substring(0,2));
-                                        int month = Integer.parseInt(tempDate.substring(3,5));
-                                        int year = Integer.parseInt(tempDate.substring(6));
-                                        LocalDate.of(day,month,year); // add
+                                        String userInput = scanner.nextLine();
+                                        int day = Integer.parseInt(userInput.substring(0,2));
+                                        int month = Integer.parseInt(userInput.substring(3,5));
+                                        int year = Integer.parseInt(userInput.substring(6));
+                                        LocalDate tempDate = LocalDate.of(day,month,year); // add
 
                                         System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
+                                        String listName = "";
+                                        if (userChoice == 1) {
+                                            listName = "breakfast";
+                                        } else if (userChoice == 2 || userChoice == 4) {
+                                            listName = "snack";
+                                        } else if (userChoice == 3) {
+                                            listName = "lunch";
+                                        } else if (userChoice == 5) {
+                                            listName = "dinner";
+                                        }
 
                                         boolean isOn5 = true;
+                                        Product p = null;
                                         while (isOn5) {
                                             System.out.println("1. Select existing product/meal.\n2. Remove existing product/meal\n3. Add new product to database.");
                                             System.out.print("Enter the option: ");
@@ -85,12 +96,16 @@ public class MainPage {
                                                         int prodNum = scanner.nextInt() - 1;
                                                         System.out.print("\nPlease enter how many grams: ");
                                                         double grams = scanner.nextDouble();
+                                                        user.getList().get(prodNum).setGrams(grams);
+                                                        p = user.getList().get(prodNum);
                                                     }
-
                                                     break;
                                                 case 2:
+                                                    user.removeProductFromMeal(p,listName);
                                                     break;
                                                 case 3:
+                                                    System.out.println(p.getName() + " was added to the database.");
+                                                    user.addProductToMeal(p, listName);
                                                     break;
                                             }
 
