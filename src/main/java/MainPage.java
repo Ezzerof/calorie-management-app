@@ -1,5 +1,5 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+import java.time.LocalDate;
 import java.util.*;
 
 public class MainPage {
@@ -11,12 +11,12 @@ public class MainPage {
 
     public void startApp() {
         boolean isOn = true;
+        User tempUser = null;
 
         //Outter while
         while (isOn) {
             System.out.print("1. Sign in\n2. Log in\n3. Quit\nPlease select a function from above: ");
             int choice = scanner.nextInt();
-            User tempUser;
 
             switch (choice) {
                 case 1:
@@ -55,36 +55,76 @@ public class MainPage {
                                     boolean isOn3 = true;
                                     while (isOn3) {
                                         System.out.print("Please enter the date(ex: 13/09/1999): ");
-                                        String tempDate = scanner.nextLine();
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        Date date = null;
-                                        try {
-                                            //Parsing the String
-                                            date = sdf.parse(tempDate);
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\nEnter the option: ");
+                                        String userInput = scanner.nextLine();
+                                        int day = Integer.parseInt(userInput.substring(0,2));
+                                        int month = Integer.parseInt(userInput.substring(3,5));
+                                        int year = Integer.parseInt(userInput.substring(6));
+                                        LocalDate tempDate = LocalDate.of(year,month,day); // add
+
+                                        System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\n 6. Go back\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
+                                        String listName = "";
+                                        if (userChoice == 1) {
+                                            listName = "breakfast";
+                                        } else if (userChoice == 2 || userChoice == 4) {
+                                            listName = "snack";
+                                        } else if (userChoice == 3) {
+                                            listName = "lunch";
+                                        } else if (userChoice == 5) {
+                                            listName = "dinner";
+                                        } else if (userChoice == 6) {
+                                            isOn3 = false;
+                                        }
 
                                         boolean isOn5 = true;
+                                        Product p = null;
                                         while (isOn5) {
-                                            System.out.println("1. Select existing product/meal.\n2. Remove existing product/meal\n3. Add new product to database.");
+                                            System.out.println("1. Select existing product/meal.\n2. Remove existing product/meal\n3. Add new product to database.\n4. Go back");
                                             System.out.print("Enter the option: ");
                                             int uChoice = scanner.nextInt();
 
                                             switch (uChoice) {
                                                 case 1:
                                                     int i = 1;
-//                                                    for (Product p : user.getDishesRepository().getList()) {
-//
-//                                                    }
-                                                    
+                                                    if (tempUser.getList().isEmpty()) {
+                                                        System.out.println("List is empty");
+                                                        break;
+                                                    } else {
+                                                        for (Product prod : tempUser.getList()) {
+                                                            System.out.printf("%d. %s", i, prod.getName());
+                                                            ++i;
+                                                        }
+                                                        System.out.print("\nPlease select the product number from above: ");
+                                                        int prodNum = scanner.nextInt() - 1;
+                                                        System.out.print("\nPlease enter how many grams: ");
+                                                        double grams = scanner.nextDouble();
+                                                        tempUser.getList().get(prodNum).setGrams(grams);
+                                                        p = tempUser.getList().get(prodNum);
+                                                    }
                                                     break;
                                                 case 2:
+                                                    tempUser.removeProductFromLOP(p);
                                                     break;
                                                 case 3:
+                                                    System.out.print("Please enter product/meal name: ");
+                                                    String tempProdName = scanner.nextLine();
+                                                    System.out.print("\nPlease enter how many grams: ");
+                                                    double tempProdGrams = scanner.nextDouble();
+                                                    System.out.print("\nPlease enter how many kcal: ");
+                                                    double tempProdKcal = scanner.nextDouble();
+                                                    System.out.print("\nPlease enter how many fats: ");
+                                                    double tempProdFats = scanner.nextDouble();
+                                                    System.out.print("\nPlease enter how many carbs: ");
+                                                    double tempProdCarbs = scanner.nextDouble();
+                                                    System.out.print("\nPlease enter how many proteins: ");
+                                                    double tempProdProteins = scanner.nextDouble();
+
+                                                    Product newProd = new Product(tempProdName, tempDate, tempProdGrams, tempProdKcal, tempProdFats, tempProdCarbs, tempProdProteins);
+                                                    tempUser.addProductToMeal(newProd, listName);
+                                                    tempUser.addProductToLOP(newProd);
                                                     break;
+                                                case 4:
+                                                    isOn5 = false;
                                             }
 
                                         }

@@ -1,14 +1,18 @@
+import java.time.LocalDate;
+
 public class Product {
 
     private String name;
+    private LocalDate date;
     private double grams;
     private double kcal;
     private double fats;
     private double carbs;
     private double proteins;
 
-    public Product(String name, double grams, double kcal, double fats, double carbs, double proteins) {
+    public Product(String name, LocalDate date, double grams, double kcal, double fats, double carbs, double proteins) {
         this.name = name;
+        this.date = date;
         this.grams = grams;
         this.kcal = kcal;
         this.fats = fats;
@@ -18,6 +22,9 @@ public class Product {
 
     public String getName() {
         return name;
+    }
+    public LocalDate getDate() {
+        return date;
     }
 
     public double getGrams() {
