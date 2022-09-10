@@ -94,6 +94,14 @@ public class User {
         return null;
     }
 
+    public void getAllProductsFormMeal(String mealName) {
+        int i = 1;
+        for (Product p : getMeal(mealName)) {
+            System.out.printf("%d. %s\n", i, p.getName());
+            ++i;
+        }
+    }
+
     protected void removeProductFromMeal(Product product, String mealName) {
         getMeal(mealName).remove(product);
     }

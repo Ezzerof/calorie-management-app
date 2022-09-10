@@ -1,4 +1,5 @@
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -54,26 +55,15 @@ public class MainPage {
                                 case 1:
                                     boolean isOn3 = true;
                                     while (isOn3) {
-                                        System.out.print("Please enter the date(ex: 13/09/1999): ");
-                                        String userInput = scanner.nextLine();
-                                        int day = Integer.parseInt(userInput.substring(0,2));
-                                        int month = Integer.parseInt(userInput.substring(3,5));
-                                        int year = Integer.parseInt(userInput.substring(6));
-                                        LocalDate tempDate = LocalDate.of(year,month,day); // add
+                                        LocalDate tempDate = getDate();
 
                                         System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\n 6. Go back\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
                                         String listName = "";
-                                        if (userChoice == 1) {
-                                            listName = "breakfast";
-                                        } else if (userChoice == 2 || userChoice == 4) {
-                                            listName = "snack";
-                                        } else if (userChoice == 3) {
-                                            listName = "lunch";
-                                        } else if (userChoice == 5) {
-                                            listName = "dinner";
-                                        } else if (userChoice == 6) {
+                                        if (userChoice == 6) {
                                             isOn3 = false;
+                                        } else {
+                                            listName = getMealName(userChoice);
                                         }
 
                                         boolean isOn5 = true;
@@ -94,12 +84,17 @@ public class MainPage {
                                                             System.out.printf("%d. %s", i, prod.getName());
                                                             ++i;
                                                         }
+
                                                         System.out.print("\nPlease select the product number from above: ");
                                                         int prodNum = scanner.nextInt() - 1;
                                                         System.out.print("\nPlease enter how many grams: ");
                                                         double grams = scanner.nextDouble();
-                                                        tempUser.getList().get(prodNum).setGrams(grams);
-                                                        p = tempUser.getList().get(prodNum);
+
+                                                        // Adding new values to the product
+                                                        Product prod = gettingNewProdValies(prodNum, grams, tempUser, tempDate);
+                                                        tempUser.getList().add(prodNum, prod);
+                                                        //Adding product to the Meal chosen in the listName
+                                                        tempUser.addProductToMeal(prod, listName);
                                                     }
                                                     break;
                                                 case 2:
@@ -126,13 +121,28 @@ public class MainPage {
                                                 case 4:
                                                     isOn5 = false;
                                             }
-
                                         }
-
-
                                     }
                                     break;
                                 case 2:
+                                    boolean isOnMealRemoval = true;
+
+                                    while (isOnMealRemoval) {
+                                        LocalDate tempProd = getDate();
+
+                                        System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\n 6. Go back\nEnter the option: ");
+                                        int userChoice = scanner.nextInt();
+                                        String mealName = "";
+                                        if (userChoice == 6) {
+                                            isOnMealRemoval = false;
+                                        } else {
+                                            mealName = getMealName(userChoice);
+                                        }
+                                        tempUser.getAllProductsFormMeal(mealName);
+                                        System.out.print("\nPlease enter number of the meal to remove it: ");
+                                        int numberOfmeal = scanner.nextInt() - 1;
+                                        tempUser.getMeal(mealName).remove(numberOfmeal);
+                                    }
                                     break;
                                 case 3:
                                     break;
@@ -186,6 +196,44 @@ public class MainPage {
                     System.out.println("Wrong input, please select again.");
             }
         }
+    }
+
+    protected String getMealName(int userChoice) {
+        String listName = "";
+        if (userChoice == 1) {
+            listName = "breakfast";
+        } else if (userChoice == 2 || userChoice == 4) {
+            listName = "snack";
+        } else if (userChoice == 3) {
+            listName = "lunch";
+        } else if (userChoice == 5) {
+            listName = "dinner";
+        }
+        return listName;
+    }
+
+    protected LocalDate getDate() {
+        System.out.print("Please enter the date(ex: 13/09/1999): ");
+        String userInput = scanner.nextLine();
+        int day = Integer.parseInt(userInput.substring(0,2));
+        int month = Integer.parseInt(userInput.substring(3,5));
+        int year = Integer.parseInt(userInput.substring(6));
+        LocalDate tempDate = LocalDate.of(year,month,day);
+        return tempDate;
+    }
+
+    protected Product gettingNewProdValies(int prodNum, double grams, User tempUser, LocalDate tempDate) {
+        double initialGrams = tempUser.getList().get(prodNum).getGrams();
+        double initKcal = tempUser.getList().get(prodNum).getKcal();
+        double initFats = tempUser.getList().get(prodNum).getFats();
+        double initCarbs = tempUser.getList().get(prodNum).getCarbs();
+        double initProteins = tempUser.getList().get(prodNum).getProteins();
+
+        double newKcal = (initKcal / initialGrams) * grams;
+        double newFats = (initFats / initialGrams) * grams;
+        double newCarbs = (initCarbs / initialGrams) * grams;
+        double newProteins = (initProteins / initialGrams) * grams;
+        return new Product(tempUser.getList().get(prodNum).getName(), tempDate, grams, newKcal, newFats, newCarbs, newProteins);
     }
 
 
