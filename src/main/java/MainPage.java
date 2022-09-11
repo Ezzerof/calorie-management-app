@@ -145,6 +145,25 @@ public class MainPage {
                                     }
                                     break;
                                 case 3:
+                                    LocalDate tempDate = getDate();
+                                    String[] meals = {"breakfast", "snack", "lunch", "dinner"};
+
+                                    for (String meal: meals) {
+                                        double kcalSum = 0;
+                                        double fatSum = 0;
+                                        double carbsSum = 0;
+                                        double proteinsSum = 0;
+                                        for (Product tempProd : tempUser.getMeal(meal)) {
+                                            if (tempProd.getDate().equals(tempDate)) {
+                                                kcalSum += tempProd.getKcal();
+                                                fatSum += tempProd.getFats();
+                                                carbsSum += tempProd.getCarbs();
+                                                proteinsSum += tempProd.getProteins();
+                                            }
+                                        }
+                                        System.out.printf("%s:\nKcal: %f\nFats: %f\nCarbs: %f\nProteins: %f\n", meal, kcalSum, fatSum, carbsSum, proteinsSum);
+                                    }
+
                                     break;
                                 case 4:
                                     boolean isOn4 = true;
