@@ -1,5 +1,4 @@
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -34,15 +33,16 @@ public class MainPage {
                     userRepository.addUser(user);
                     break;
                 case 2:
-                    System.out.print("Please enter your username: ");
+                    System.out.print("\nPlease enter your username: ");
                     String input = scanner.next();
                     if (savedUsernames.contains(input)) {
 
-                        boolean isOn2 = true;
+                        boolean isLoginOn = true;
 
-                        while (isOn2) {
+                        while (isLoginOn) {
 
                             tempUser = userRepository.getUserByUsername(input);
+                            System.out.println();
                             System.out.println("1. Add to product/meal to your daily diary.\n" +
                                     "2. Remove product/meal from your daily diary.\n" +
                                     "3. Check your daily sum up.\n" +
@@ -53,56 +53,74 @@ public class MainPage {
 
                             switch (function) {
                                 case 1:
-                                    boolean isOn3 = true;
-                                    while (isOn3) {
+                                    boolean isMainUserMenuOn = true;
+                                    while (isMainUserMenuOn) {
                                         LocalDate tempDate = getDate();
 
-                                        System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\n 6. Go back\nEnter the option: ");
+                                        System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\n6. Go back\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
-                                        String listName = "";
+                                        String mealName = "";
                                         if (userChoice == 6) {
-                                            isOn3 = false;
+                                            break;
                                         } else {
-                                            listName = getMealName(userChoice);
+                                            mealName = getMealName(userChoice);
                                         }
 
-                                        boolean isOn5 = true;
-                                        Product p = null;
-                                        while (isOn5) {
-                                            System.out.println("1. Select existing product/meal.\n2. Remove existing product/meal\n3. Add new product to database.\n4. Go back");
+                                        boolean secondUserMenuOn = true;
+                                        Product userChosenProduct = null;
+
+                                        while (secondUserMenuOn) {
+
+                                            System.out.println("\n1. Select existing product/meal from database.\n2. Remove existing product/meal from database\n3. Add new product to database.\n4. Go back");
                                             System.out.print("Enter the option: ");
                                             int uChoice = scanner.nextInt();
+                                            System.out.println();
+                                            String userSelectedProd = "";
 
                                             switch (uChoice) {
                                                 case 1:
                                                     int i = 1;
-                                                    if (tempUser.getList().isEmpty()) {
-                                                        System.out.println("List is empty");
+                                                    if (tempUser.getLOP().isEmpty()) {
+                                                        System.out.println("List is empty\n");
                                                         break;
                                                     } else {
-                                                        for (Product prod : tempUser.getList()) {
-                                                            System.out.printf("%d. %s", i, prod.getName());
+                                                        System.out.println();
+                                                        for (Product prod : tempUser.getLOP()) {
+                                                            System.out.printf("%d. %s %.2f\n", i, prod.getName(), prod.getGrams());
                                                             ++i;
                                                         }
+                                                        System.out.print("\nPlease select the product number from above or enter -1 to go back: ");
+                                                        int prodNum = scanner.nextInt();
+                                                        if (prodNum == -1) {
+                                                            break;
+                                                        }
+                                                        prodNum -=1;
+                                                        Product chosenProduct = tempUser.getLOP().get(prodNum);
+                                                        userSelectedProd = chosenProduct.getName();
 
-                                                        System.out.print("\nPlease select the product number from above: ");
-                                                        int prodNum = scanner.nextInt() - 1;
-                                                        System.out.print("\nPlease enter how many grams: ");
-                                                        double grams = scanner.nextDouble();
+                                                        System.out.println("Do you want to edit it? (yes or no): ");
+                                                        String strChoice = scanner.next();
+                                                        if (strChoice.equals("yes")) {
 
-                                                        // Adding new values to the product
-                                                        Product prod = gettingNewProdValies(prodNum, grams, tempUser, tempDate);
-                                                        tempUser.getList().add(prodNum, prod);
-                                                        //Adding product to the Meal chosen in the listName
-                                                        tempUser.addProductToMeal(prod, listName);
+                                                            System.out.print("\nPlease enter how many grams: ");
+                                                            double grams = scanner.nextDouble();
+
+                                                            // Adding new values to the product
+                                                            Product prod = gettingNewProdValies(prodNum, grams, tempUser, tempDate);
+                                                            //Adding product to the Meal chosen in the listName
+                                                            tempUser.addProductToMeal(prod, mealName);
+                                                        } else if (strChoice.equals("no")) {
+                                                            tempUser.addProductToMeal(chosenProduct, mealName);
+                                                        }
                                                     }
                                                     break;
                                                 case 2:
-                                                    tempUser.removeProductFromLOP(p);
+                                                    tempUser.removeProductFromLOP(userSelectedProd);
                                                     break;
                                                 case 3:
+                                                    System.out.println();
                                                     System.out.print("Please enter product/meal name: ");
-                                                    String tempProdName = scanner.nextLine();
+                                                    String tempProdName = scanner.next();
                                                     System.out.print("\nPlease enter how many grams: ");
                                                     double tempProdGrams = scanner.nextDouble();
                                                     System.out.print("\nPlease enter how many kcal: ");
@@ -113,13 +131,14 @@ public class MainPage {
                                                     double tempProdCarbs = scanner.nextDouble();
                                                     System.out.print("\nPlease enter how many proteins: ");
                                                     double tempProdProteins = scanner.nextDouble();
+                                                    System.out.println();
 
                                                     Product newProd = new Product(tempProdName, tempDate, tempProdGrams, tempProdKcal, tempProdFats, tempProdCarbs, tempProdProteins);
-                                                    tempUser.addProductToMeal(newProd, listName);
+                                                    tempUser.addProductToMeal(newProd, mealName);
                                                     tempUser.addProductToLOP(newProd);
                                                     break;
                                                 case 4:
-                                                    isOn5 = false;
+                                                    secondUserMenuOn = false;
                                             }
                                         }
                                     }
@@ -140,8 +159,8 @@ public class MainPage {
                                         }
                                         tempUser.getAllProductsFormMeal(mealName);
                                         System.out.print("\nPlease enter number of the meal to remove it: ");
-                                        int numberOfmeal = scanner.nextInt() - 1;
-                                        tempUser.getMeal(mealName).remove(numberOfmeal);
+                                        int numberOfMeal = scanner.nextInt() - 1;
+                                        tempUser.getMeal(mealName).remove(numberOfMeal);
                                     }
                                     break;
                                 case 3:
@@ -161,7 +180,7 @@ public class MainPage {
                                                 proteinsSum += tempProd.getProteins();
                                             }
                                         }
-                                        System.out.printf("%s:\nKcal: %f\nFats: %f\nCarbs: %f\nProteins: %f\n", meal, kcalSum, fatSum, carbsSum, proteinsSum);
+                                        System.out.printf("%s:\nKcal: %.2f\nFats: %.2f\nCarbs: %.2f\nProteins: %.2f\n", meal, kcalSum, fatSum, carbsSum, proteinsSum);
                                     }
 
                                     break;
@@ -201,7 +220,7 @@ public class MainPage {
                                     break;
                                 case 5:
                                     tempUser = null;
-                                    isOn2 = false;
+                                    isLoginOn = false;
                                     break;
                             }
                         }
@@ -234,25 +253,27 @@ public class MainPage {
     protected LocalDate getDate() {
         System.out.print("Please enter the date(ex: 13/09/1999): ");
         String userInput = scanner.nextLine();
-        int day = Integer.parseInt(userInput.substring(0,2));
-        int month = Integer.parseInt(userInput.substring(3,5));
-        int year = Integer.parseInt(userInput.substring(6));
-        LocalDate tempDate = LocalDate.of(year,month,day);
+        System.out.println(userInput);
+//        int day = Integer.parseInt(userInput.substring(0,2));
+//        int month = Integer.parseInt(userInput.substring(3,5));
+//        int year = Integer.parseInt(userInput.substring(6));
+//        LocalDate tempDate = LocalDate.of(year,month,day);
+        LocalDate tempDate = LocalDate.of(2020,12,23);
         return tempDate;
     }
 
     protected Product gettingNewProdValies(int prodNum, double grams, User tempUser, LocalDate tempDate) {
-        double initialGrams = tempUser.getList().get(prodNum).getGrams();
-        double initKcal = tempUser.getList().get(prodNum).getKcal();
-        double initFats = tempUser.getList().get(prodNum).getFats();
-        double initCarbs = tempUser.getList().get(prodNum).getCarbs();
-        double initProteins = tempUser.getList().get(prodNum).getProteins();
+        double initialGrams = tempUser.getLOP().get(prodNum).getGrams();
+        double initKcal = tempUser.getLOP().get(prodNum).getKcal();
+        double initFats = tempUser.getLOP().get(prodNum).getFats();
+        double initCarbs = tempUser.getLOP().get(prodNum).getCarbs();
+        double initProteins = tempUser.getLOP().get(prodNum).getProteins();
 
         double newKcal = (initKcal / initialGrams) * grams;
         double newFats = (initFats / initialGrams) * grams;
         double newCarbs = (initCarbs / initialGrams) * grams;
         double newProteins = (initProteins / initialGrams) * grams;
-        return new Product(tempUser.getList().get(prodNum).getName(), tempDate, grams, newKcal, newFats, newCarbs, newProteins);
+        return new Product(tempUser.getLOP().get(prodNum).getName(), tempDate, grams, newKcal, newFats, newCarbs, newProteins);
     }
 
 

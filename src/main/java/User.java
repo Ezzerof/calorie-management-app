@@ -72,7 +72,7 @@ public class User {
         return userFatPercentage;
     }
 
-    public List<Product> getList() {
+    public List<Product> getLOP() {
         return listOfProducts;
     }
 
@@ -106,20 +106,22 @@ public class User {
         getMeal(mealName).remove(product);
     }
 
-    protected void addProductToLOP(Product product) {
+    protected boolean isProductOnList(Product product) {
         for (Product p: listOfProducts) {
-            if (!p.getName().equals(product.getName())) {
-                listOfProducts.add(product);
-            } else {
-                listOfProducts.add(listOfProducts.indexOf(p), product);
+            if (p.getName().equals(product.getName())) {
+                listOfProducts.remove(p);
+                return true;
             }
         }
+        return false;
+    }
+    protected void addProductToLOP(Product product) {
+        isProductOnList(product);
+        listOfProducts.add(product);
     }
 
-    public void removeProductFromLOP(Product product) {
-        if (listOfProducts.contains(product)) {
-            listOfProducts.remove(product);
-        }
+    public void removeProductFromLOP(String productName) {
+        this.listOfProducts.removeIf(p -> p.getName().equals(productName));
     }
 
 }

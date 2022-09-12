@@ -11,7 +11,7 @@ public class Product {
     private double proteins;
 
     public Product(String name, LocalDate date, double grams, double kcal, double fats, double carbs, double proteins) {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.date = date;
         this.grams = grams;
         this.kcal = kcal;
