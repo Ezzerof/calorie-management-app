@@ -152,11 +152,13 @@ public class MainPage {
                                         System.out.print("\nChoose meal:\n1. Breakfast\n2. Snack\n3. Lunch\n4. Snack\n5. Dinner\n 6. Go back\nEnter the option: ");
                                         int userChoice = scanner.nextInt();
                                         String mealName = "";
+
                                         if (userChoice == 6) {
                                             isOnMealRemoval = false;
                                         } else {
                                             mealName = getMealName(userChoice);
                                         }
+
                                         tempUser.getAllProductsFormMeal(mealName);
                                         System.out.print("\nPlease enter number of the meal to remove it: ");
                                         int numberOfMeal = scanner.nextInt() - 1;
@@ -185,8 +187,9 @@ public class MainPage {
 
                                     break;
                                 case 4:
-                                    boolean isOn4 = true;
-                                    while (isOn4) {
+                                    boolean userProfileMenuOn = true;
+                                    while (userProfileMenuOn) {
+
                                         System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Quit" +
                                                 "\nPlease select from above: ");
                                         int select = scanner.nextInt();
@@ -213,10 +216,9 @@ public class MainPage {
                                                 System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage());
                                                 break;
                                             case 4:
-                                                isOn4 = false;
+                                                userProfileMenuOn = false;
                                         }
                                     }
-
                                     break;
                                 case 5:
                                     tempUser = null;
@@ -251,15 +253,13 @@ public class MainPage {
     }
 
     protected LocalDate getDate() {
+        Scanner inp = new Scanner(System.in);
         System.out.print("Please enter the date(ex: 13/09/1999): ");
-        String userInput = scanner.nextLine();
-        System.out.println(userInput);
-//        int day = Integer.parseInt(userInput.substring(0,2));
-//        int month = Integer.parseInt(userInput.substring(3,5));
-//        int year = Integer.parseInt(userInput.substring(6));
-//        LocalDate tempDate = LocalDate.of(year,month,day);
-        LocalDate tempDate = LocalDate.of(2020,12,23);
-        return tempDate;
+        String userInput = inp.nextLine();
+        int day = Integer.parseInt(userInput.substring(0,2));
+        int month = Integer.parseInt(userInput.substring(3,5));
+        int year = Integer.parseInt(userInput.substring(6));
+        return LocalDate.of(year,month,day);
     }
 
     protected Product gettingNewProdValies(int prodNum, double grams, User tempUser, LocalDate tempDate) {
