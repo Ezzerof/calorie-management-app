@@ -12,12 +12,11 @@ public class MainPage {
     public void startApp() {
         boolean isOn = true;
         User tempUser = null;
-        Product userSelectedProd = null;
 
         //Main menu starts
         while (isOn) {
             System.out.print("1. Sign in\n2. Log in\n3. Quit\nPlease select a function from above: ");
-            int choice = scanner.nextInt();
+            int choice = intValidation();
 
             switch (choice) {
                 // Creating account
@@ -42,7 +41,6 @@ public class MainPage {
                     if (savedUsernames.contains(input)) {
 
                         boolean isLoginOn = true;
-
                         while (isLoginOn) {
 
                             tempUser = userRepository.getUserByUsername(input);
@@ -53,18 +51,21 @@ public class MainPage {
                                     "4. Edit profile\n" +
                                     "5. Log out and go back to main menu.\n");
                             System.out.print("Please select a function from above: ");
-                            int function = scanner.nextInt();
+                            int function = intValidation();
 
                             switch (function) {
                                 case 1:
                                     // Adding product or dish to the diary
                                     boolean isMainUserMenuOn = true;
                                     while (isMainUserMenuOn) {
-                                        LocalDate tempDate = getDate();
 
+                                        LocalDate tempDate = getDate();
                                         String mealName = gettingMealType();
 
                                         if (mealName.equals("out")) {
+                                            isMainUserMenuOn = false;
+                                        } else if (mealName.equals("error")) {
+                                            System.out.println("Wrong input.");
                                             isMainUserMenuOn = false;
                                         }
 
@@ -73,8 +74,7 @@ public class MainPage {
 
                                             System.out.println("\n1. Select existing product/dish from database.\n2. Remove existing product/dish from database\n3. Add new product/dish to database.\n4. Go back");
                                             System.out.print("Enter the option: ");
-                                            int uChoice = scanner.nextInt();
-                                            System.out.println();
+                                            int uChoice = intValidation();
 
                                             switch (uChoice) {
                                                 // Selecting existing products or dishes from the database
@@ -92,13 +92,16 @@ public class MainPage {
                                                         if (strChoice.equals("yes")) {
 
                                                             System.out.print("\nPlease enter how many grams: ");
-                                                            double grams = scanner.nextDouble();
+                                                            double grams = doubleValidation();
 
                                                             // Adding new values to the product
                                                             gettingNewProdValues(prodNum, grams, tempUser);
 
                                                         } else if (strChoice.equals("no")) {
                                                             tempUser.addProductToMeal(chosenProduct, mealName);
+                                                        } else {
+                                                            System.out.println("Wrong input.");
+                                                            break;
                                                         }
                                                     }
 
@@ -118,17 +121,17 @@ public class MainPage {
                                                 case 3:
                                                     // Adding a new product to dish to the database
                                                     System.out.print("Please enter product/dish name: ");
-                                                    String tempProdName = scanner.next();
+                                                    String tempProdName = scanner.next();                           // need validation
                                                     System.out.print("Please enter how many grams: ");
-                                                    double tempProdGrams = scanner.nextDouble();
+                                                    double tempProdGrams = doubleValidation();
                                                     System.out.print("Please enter how many kcal: ");
-                                                    double tempProdKcal = scanner.nextDouble();
+                                                    double tempProdKcal = doubleValidation();
                                                     System.out.print("Please enter how many fats: ");
-                                                    double tempProdFats = scanner.nextDouble();
+                                                    double tempProdFats = doubleValidation();
                                                     System.out.print("Please enter how many carbs: ");
-                                                    double tempProdCarbs = scanner.nextDouble();
+                                                    double tempProdCarbs = doubleValidation();
                                                     System.out.print("Please enter how many proteins: ");
-                                                    double tempProdProteins = scanner.nextDouble();
+                                                    double tempProdProteins = doubleValidation();
 
                                                     Product newProd = new Product(tempProdName, tempDate, tempProdGrams, tempProdKcal, tempProdFats, tempProdCarbs, tempProdProteins);
                                                     tempUser.addProductToMeal(newProd, mealName);
@@ -138,6 +141,10 @@ public class MainPage {
                                                     // Going back to the previous menu
                                                     secondUserMenuOn = false;
                                                     isMainUserMenuOn = false;
+                                                    break;
+                                                default:
+                                                    System.out.println("Wrong input.");
+                                                    secondUserMenuOn = false;
                                                     break;
                                             }
                                         }
@@ -156,7 +163,8 @@ public class MainPage {
 
                                         if (tempUser.getAllProductsFormMeal(mealName)) {
                                             System.out.print("\nPlease enter number of the products/dishes to remove it: ");
-                                            int numberOfMeal = scanner.nextInt() - 1;
+                                            int numberOfMeal = intValidation();
+                                            numberOfMeal -= 1;
                                             tempUser.getMeal(mealName).remove(numberOfMeal);
                                         } else {
                                             break;
@@ -195,7 +203,14 @@ public class MainPage {
 
                                         System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Quit" +
                                                 "\nPlease select from above: ");
-                                        int select = scanner.nextInt();
+                                        int select = 0;
+                                        try {
+                                            select = scanner.nextInt();
+
+                                        } catch (InputMismatchException e) {
+                                            scanner.nextLine();
+                                        }
+
                                         switch (select) {
                                             case 1:
                                                 System.out.println("Your current weight is: " + tempUser.getUserWeight());
@@ -220,6 +235,9 @@ public class MainPage {
                                                 break;
                                             case 4:
                                                 userProfileMenuOn = false;
+                                            default:
+                                                System.out.println("Wrong input.");
+                                                break;
                                         }
                                     }
                                     break;
@@ -227,6 +245,9 @@ public class MainPage {
                                     // Log out
                                     tempUser = null;
                                     isLoginOn = false;
+                                    break;
+                                default:
+                                    System.out.println("You have entered a wrong number.");
                                     break;
                             }
                         }
@@ -259,19 +280,37 @@ public class MainPage {
         return prodNum;
     }
 
-    protected String getMealName(int userChoice) {
-        String listName = "";
-        if (userChoice == 1) {
-            listName = "breakfast";
-        } else if (userChoice == 2 || userChoice == 4) {
-            listName = "snack";
-        } else if (userChoice == 3) {
-            listName = "lunch";
-        } else if (userChoice == 5) {
-            listName = "dinner";
+    protected int intValidation() {
+        int number = 0;
+        boolean isOn = true;
+        while (isOn) {
+            try {
+                number = scanner.nextInt();
+                isOn = false;
+
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.print("Wrong input. Please enter again: ");
+            }
         }
-        return listName;
+        return number;
     }
+
+   protected double doubleValidation() {
+       double tempProdGrams = 0;
+       boolean isOn = true;
+       while (isOn) {
+            try {
+                tempProdGrams = scanner.nextDouble();
+                isOn = false;
+
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.print("Wrong input. Please enter again: ");
+            }
+        }
+       return tempProdGrams;
+   }
 
     protected LocalDate getDate() {
         Scanner inp = new Scanner(System.in);
@@ -305,6 +344,9 @@ public class MainPage {
                 break;
             case 6:
                 mealName = "out";
+                break;
+            default:
+                mealName = "error";
                 break;
         }
         return mealName;
@@ -383,13 +425,18 @@ public class MainPage {
         int tempAge = 0;
         boolean isOn = true;
         while (isOn) {
-            System.out.print("Please enter your age using numbers: ");
-            int age = scanner.nextInt();
-            if (age < 15 || age > 90) {
-                System.out.println("Your age is invalid.");
-            } else {
-                tempAge = age;
-                isOn = false;
+            try {
+                System.out.print("Please enter your age using numbers: ");
+                int age = scanner.nextInt();
+                if (age < 15 || age > 90) {
+                    System.out.println("Your age is invalid.");
+                } else {
+                    tempAge = age;
+                    isOn = false;
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Wrong input");
             }
         }
 
@@ -401,14 +448,19 @@ public class MainPage {
         double weight = 0;
 
         while (isOn) {
-            System.out.print("Enter your weight: ");
-            double input = scanner.nextDouble();
+            try {
+                System.out.print("Enter your weight: ");
+                double input = scanner.nextDouble();
 
-            if (input < 20 || input > 200) {
-                System.out.println("Invalid weight.");
-            } else {
-                weight = input;
-                isOn = false;
+                if (input < 20 || input > 200) {
+                    System.out.println("Invalid weight.");
+                } else {
+                    weight = input;
+                    isOn = false;
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Wrong input");
             }
         }
         return weight;
@@ -419,13 +471,18 @@ public class MainPage {
         double height = 0;
 
         while (isOn) {
-            System.out.print("Enter your height(example 1.87): ");
-            double input = scanner.nextDouble();
-            if (input < 1 || input > 2.3) {
-                System.out.println("Invalid height.");
-            } else {
-                height = input;
-                isOn = false;
+            try {
+                System.out.print("Enter your height(example 1.87): ");
+                double input = scanner.nextDouble();
+                if (input < 1 || input > 2.3) {
+                    System.out.println("Invalid height.");
+                } else {
+                    height = input;
+                    isOn = false;
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Wrong input");
             }
         }
         return height;
@@ -436,13 +493,18 @@ public class MainPage {
         double fat = 0;
 
         while (isOn) {
-            System.out.print("Enter your fat percentage: ");
-            double input = scanner.nextDouble();
-            if (input < 1 || input > 90) {
-                System.out.println("Invalid fat percentage.");
-            } else {
-                fat = input;
-                isOn = false;
+            try {
+                System.out.print("Enter your fat percentage: ");
+                double input = scanner.nextDouble();
+                if (input < 1 || input > 90) {
+                    System.out.println("Invalid fat percentage.");
+                } else {
+                    fat = input;
+                    isOn = false;
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Wrong input");
             }
         }
         return fat;

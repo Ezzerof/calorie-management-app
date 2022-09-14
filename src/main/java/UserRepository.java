@@ -9,11 +9,6 @@ public class UserRepository {
     public void addUser(final User name) {
         existingUsers.add(name);
     }
-
-    public boolean findExistingUser(final User name) {
-        return existingUsers.contains(name);
-    }
-
     public Optional<User> getExistingUsers(final String name) {
         return existingUsers
                 .stream()
