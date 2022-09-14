@@ -94,16 +94,18 @@ public class User {
         return null;
     }
 
-    public void getAllProductsFormMeal(String mealName) {
-        int i = 1;
-        for (Product p : getMeal(mealName)) {
-            System.out.printf("%d. %s\n", i, p.getName());
-            ++i;
+    public boolean getAllProductsFormMeal(String mealName) {
+        if (getMeal(mealName).isEmpty()) {
+            System.out.printf("%s list is empty", mealName);
+            return false;
+        } else {
+            int i = 1;
+            for (Product p : getMeal(mealName)) {
+                System.out.printf("%d. %s\n", i, p.getName());
+                ++i;
+            }
         }
-    }
-
-    protected void removeProductFromMeal(Product product, String mealName) {
-        getMeal(mealName).remove(product);
+        return true;
     }
 
     protected boolean isProductOnList(Product product) {
@@ -118,10 +120,6 @@ public class User {
     protected void addProductToLOP(Product product) {
         isProductOnList(product);
         listOfProducts.add(product);
-    }
-
-    public void removeProductFromLOP(String productName) {
-        this.listOfProducts.removeIf(p -> p.getName().equals(productName));
     }
 
 }
