@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserRepository {
 
@@ -8,12 +7,6 @@ public class UserRepository {
 
     public void addUser(final User name) {
         existingUsers.add(name);
-    }
-    public Optional<User> getExistingUsers(final String name) {
-        return existingUsers
-                .stream()
-                .filter(user -> user.getName().equals(name)).findFirst();
-
     }
 
     public User getUserByUsername(final String username) {
@@ -25,10 +18,4 @@ public class UserRepository {
         return null;
     }
 
-    public void removeExistingUser(final String name) {
-
-        if (getExistingUsers(name).isPresent()) {
-            existingUsers.remove(name);
-        }
-    }
 }

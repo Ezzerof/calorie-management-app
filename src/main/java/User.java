@@ -1,8 +1,6 @@
 
 import java.util.*;
 
-
-
 public class User {
 
     private String name;
@@ -42,10 +40,6 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-
-    public int getUserAge() {
-        return userAge;
     }
 
     public double getUserWeight() {

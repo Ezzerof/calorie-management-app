@@ -23,10 +23,6 @@ public class Product {
     public String getName() {
         return name;
     }
-    public LocalDate getDate() {
-        return date;
-    }
-
     public double getGrams() {
         return grams;
     }
