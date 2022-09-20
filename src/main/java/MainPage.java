@@ -182,7 +182,7 @@ public class MainPage {
 
                                         switch (userSumChoice) {
                                             case 1:
-                                                gettingDailySum(tempUser);
+                                                gettingDailySum(tempUser, tempDate);
                                                 break;
                                             case 2:
                                                 String mealName = gettingMealType();
@@ -192,7 +192,7 @@ public class MainPage {
                                                     break;
                                                 }
 
-                                                gettingDailySum(tempUser, mealName);
+                                                gettingDailySum(tempUser, mealName, tempDate);
 
                                                 isGettingSumOn = false;
                                                 break;
@@ -297,7 +297,7 @@ public class MainPage {
         return prodNum;
     }
 
-    protected void gettingDailySum(User tempUser, String mealName) {
+    protected void gettingDailySum(User tempUser, String mealName, LocalDate date) {
 
         double kcalSum = 0;
         double fatSum = 0;
@@ -305,15 +305,17 @@ public class MainPage {
         double proteinsSum = 0;
 
         for (Product product : tempUser.getMeal(mealName)) {
-            kcalSum += product.getKcal();
-            fatSum += product.getFats();
-            carbsSum += product.getCarbs();
-            proteinsSum += product.getProteins();
+            if (product.getDate().equals(date)) {
+                kcalSum += product.getKcal();
+                fatSum += product.getFats();
+                carbsSum += product.getCarbs();
+                proteinsSum += product.getProteins();
+            }
         }
         System.out.printf("\n%s:\nKcal: %.2f\nFats: %.2f\nCarbs: %.2f\nProteins: %.2f\n", mealName, kcalSum, fatSum, carbsSum, proteinsSum);
     }
 
-    protected void gettingDailySum(User tempUser) {
+    protected void gettingDailySum(User tempUser, LocalDate date) {
 
         double kcalSum = 0;
         double fatSum = 0;
@@ -324,10 +326,12 @@ public class MainPage {
 
         for (String meal: meals) {
             for (Product product : tempUser.getMeal(meal)) {
-                kcalSum += product.getKcal();
-                fatSum += product.getFats();
-                carbsSum += product.getCarbs();
-                proteinsSum += product.getProteins();
+                if (product.getDate().equals(date)) {
+                    kcalSum += product.getKcal();
+                    fatSum += product.getFats();
+                    carbsSum += product.getCarbs();
+                    proteinsSum += product.getProteins();
+                }
             }
         }
         System.out.printf("\n%s:\nKcal: %.2fg\nFats: %.2fg\nCarbs: %.2fg\nProteins: %.2fg\n","Daily sum", kcalSum, fatSum, carbsSum, proteinsSum);
@@ -351,12 +355,18 @@ public class MainPage {
 
     protected int exercisesTimeValidation() {
         int exercisesTime = 0;
+        int minMovementTime = 0;
+        int maxMovementTime = 10080; // (24hours x 60min ) x 7 days
         boolean isOn = true;
         while (isOn) {
             try {
+                System.out.print("Enter your movement time in minutes: ");
                 exercisesTime = scanner.nextInt();
-                isOn = false;
-
+                if (exercisesTime < minMovementTime || exercisesTime > maxMovementTime) {
+                    System.out.println("Invalid input.");
+                } else {
+                    isOn = false;
+                }
             } catch (InputMismatchException e) {
                 scanner.nextLine();
                 System.out.print("Wrong input. Please enter again: ");

@@ -26,6 +26,9 @@ public class Product {
     public double getGrams() {
         return grams;
     }
+    public LocalDate getDate() {
+        return date;
+    }
 
     public double getKcal() {
         return kcal;
