@@ -9,6 +9,7 @@ public class User {
     private double userWeight;
     private double userHeight;
     private double userFatPercentage;
+    private int movementDuration;
     private String userGoal;
     private List<Product> breakfast;
     private List<Product> snack;
@@ -17,13 +18,14 @@ public class User {
     private List<Product> listOfProducts;
 
 
-    public User(String name, String username, int userAge, double userWeight, double userHeight, double userFatPercentage, String userGoal) {
+    public User(String name, String username, int userAge, double userWeight, double userHeight, double userFatPercentage, int movementDuration, String userGoal) {
         this.name = name;
         this.username = username;
         this.userAge = userAge;
         addUserWeight(userWeight);
         addUserHeight(userHeight);
         addUserFatPercentage(userFatPercentage);
+        this.movementDuration = movementDuration;
         this.userGoal = userGoal;
         listOfProducts = new ArrayList<>();
         breakfast = new ArrayList<>();
@@ -64,6 +66,9 @@ public class User {
 
     public double getUserFatPercentage() {
         return userFatPercentage;
+    }
+    public int getUserMovementDuration() {
+        return movementDuration;
     }
 
     public List<Product> getLOP() {

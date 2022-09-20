@@ -28,9 +28,10 @@ public class MainPage {
                     double weight = isWeightValid();
                     double height = isHeightValid();
                     double fatPercentage = isFatPercentageValid();
+                    int exercisesTime = exercisesTimeValidation();
                     String userGoal = userGoalValidation();
 
-                    User user = new User(name, username, age, weight, height, fatPercentage, userGoal);
+                    User user = new User(name, username, age, weight, height, fatPercentage, exercisesTime, userGoal);
                     userRepository.addUser(user);
                     break;
                     // End of creating account
@@ -210,7 +211,7 @@ public class MainPage {
                                     boolean userProfileMenuOn = true;
                                     while (userProfileMenuOn) {
 
-                                        System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Quit" +
+                                        System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Edit movement time\n 5. Go back" +
                                                 "\nPlease select from above: ");
                                         int select = 0;
                                         try {
@@ -236,13 +237,20 @@ public class MainPage {
                                                 System.out.println("Your new height is: " + tempUser.getUserHeight());
                                                 break;
                                             case 3:
-                                                System.out.println("Your current fat percentage is: " + tempUser.getUserFatPercentage());
+                                                System.out.println("Your current fat percentage is: " + tempUser.getUserFatPercentage() + "%");
                                                 System.out.print("\nPlease enter your new fat percentage: ");
                                                 double newFatPercentage = isFatPercentageValid();
                                                 tempUser.addUserFatPercentage(newFatPercentage);
-                                                System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage());
+                                                System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage() + "%");
                                                 break;
                                             case 4:
+                                                System.out.println("Your current movement time is: " + tempUser.getUserMovementDuration());
+                                                System.out.print("\nPlease enter your new movement time: ");
+                                                double newMovementTime = exercisesTimeValidation();
+                                                tempUser.addUserFatPercentage(newMovementTime);
+                                                System.out.println("Your new movement time is: " + tempUser.getUserMovementDuration());
+                                                break;
+                                            case 5:
                                                 userProfileMenuOn = false;
                                             default:
                                                 System.out.println("Wrong input.");
@@ -322,7 +330,7 @@ public class MainPage {
                 proteinsSum += product.getProteins();
             }
         }
-        System.out.printf("\n%s:\nKcal: %.2f\nFats: %.2f\nCarbs: %.2f\nProteins: %.2f\n","Daily sum", kcalSum, fatSum, carbsSum, proteinsSum);
+        System.out.printf("\n%s:\nKcal: %.2fg\nFats: %.2fg\nCarbs: %.2fg\nProteins: %.2fg\n","Daily sum", kcalSum, fatSum, carbsSum, proteinsSum);
     }
 
     protected int intValidation() {
@@ -339,6 +347,22 @@ public class MainPage {
             }
         }
         return number;
+    }
+
+    protected int exercisesTimeValidation() {
+        int exercisesTime = 0;
+        boolean isOn = true;
+        while (isOn) {
+            try {
+                exercisesTime = scanner.nextInt();
+                isOn = false;
+
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.print("Wrong input. Please enter again: ");
+            }
+        }
+        return exercisesTime;
     }
 
    protected double doubleValidation() {
