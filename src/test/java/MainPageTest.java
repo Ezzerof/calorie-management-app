@@ -10,7 +10,7 @@ class MainPageTest {
 
     @Test
     void nameValidation() {
-
+        mp.isNameValid();
     }
 
     @Test

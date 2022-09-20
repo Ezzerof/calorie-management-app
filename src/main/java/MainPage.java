@@ -5,38 +5,41 @@ import java.util.*;
 public class MainPage {
 
     private UserRepository userRepository = new UserRepository();
-
     private static Set<String> savedUsernames = new HashSet<>();
     Scanner scanner = new Scanner(System.in);
     User tempUser = null;
 
     public void startApp() {
         boolean isOn = true;
-        User tempUser = null;
 
         //Main menu starts
         while (isOn) {
             System.out.print("1. Sign in\n2. Log in\n3. Quit\nPlease select a function from above: ");
             int choice = intValidation();
 
-            switch (choice) {
-                // Creating account
-                case 1:
-                    accountCreation();
-                    break;
-                case 2:
-                    // Log in to the app
-                    logInToAccount();
-                    break;
-                case 3:
-                    // Quiting app
-                    System.out.println("App is quiting...");
-                    isOn = false;
-                    break;
-                default:
-                    System.out.println("Wrong input, please select again.");
-            }
+            isOn = userChoice(true, choice);
         }
+    }
+
+    private boolean userChoice(boolean isOn, int choice) {
+        switch (choice) {
+            // Creating account
+            case 1:
+                accountCreation();
+                break;
+            case 2:
+                // Log in to the app
+                logInToAccount();
+                break;
+            case 3:
+                // Quiting app
+                System.out.println("App is quiting...");
+                isOn = false;
+                break;
+            default:
+                System.out.println("Wrong input, please select again.");
+        }
+        return isOn;
     }
 
     protected void accountCreation() {
