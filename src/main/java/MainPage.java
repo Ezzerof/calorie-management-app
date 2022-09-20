@@ -45,7 +45,7 @@ public class MainPage {
 
                             tempUser = userRepository.getUserByUsername(input);
                             System.out.println();
-                            System.out.println("1. Add to product/dish to your daily diary.\n" +
+                            System.out.println("1. Add product/dish to your daily diary.\n" +
                                     "2. Remove product/dish from your daily diary.\n" +
                                     "3. Check your daily sum up.\n" +
                                     "4. Edit profile\n" +
@@ -134,7 +134,6 @@ public class MainPage {
                                                     double tempProdProteins = doubleValidation();
 
                                                     Product newProd = new Product(tempProdName, tempDate, tempProdGrams, tempProdKcal, tempProdFats, tempProdCarbs, tempProdProteins);
-                                                    tempUser.addProductToMeal(newProd, mealName);
                                                     tempUser.addProductToLOP(newProd);
                                                     break;
                                                 case 4:
@@ -176,25 +175,35 @@ public class MainPage {
                                     boolean isGettingSumOn = true;
                                     while (isGettingSumOn) {
                                         LocalDate tempDate = getDate();
-                                        String mealName = gettingMealType();
 
-                                        if (mealName.equals("out")) {
-                                            isGettingSumOn = false;
+                                        System.out.println("1. Get sum for all day.\n2. Get sum for every meal.\n3. Go back.");
+                                        int userSumChoice = scanner.nextInt();
+
+                                        switch (userSumChoice) {
+                                            case 1:
+                                                gettingDailySum(tempUser);
+                                                break;
+                                            case 2:
+                                                String mealName = gettingMealType();
+
+                                                if (mealName.equals("out")) {
+                                                    isGettingSumOn = false;
+                                                    break;
+                                                }
+
+                                                gettingDailySum(tempUser, mealName);
+
+                                                isGettingSumOn = false;
+                                                break;
+                                            case 3:
+                                                isGettingSumOn = false;
+                                                break;
+                                            default:
+                                                System.out.println("Wrong input");
+                                                break;
                                         }
-
-                                        double kcalSum = 0;
-                                        double fatSum = 0;
-                                        double carbsSum = 0;
-                                        double proteinsSum = 0;
-
-                                        for (Product product : tempUser.getMeal(mealName)) {
-                                            kcalSum += product.getKcal();
-                                            fatSum += product.getFats();
-                                            carbsSum += product.getCarbs();
-                                            proteinsSum += product.getProteins();
-                                        }
-                                        System.out.printf("\n%s:\nKcal: %.2f\nFats: %.2f\nCarbs: %.2f\nProteins: %.2f\n", mealName, kcalSum, fatSum, carbsSum, proteinsSum);
                                     }
+
                                     break;
                                 case 4:
                                     // Editing user profile
@@ -278,6 +287,42 @@ public class MainPage {
             prodNum = scanner.nextInt();
         }
         return prodNum;
+    }
+
+    protected void gettingDailySum(User tempUser, String mealName) {
+
+        double kcalSum = 0;
+        double fatSum = 0;
+        double carbsSum = 0;
+        double proteinsSum = 0;
+
+        for (Product product : tempUser.getMeal(mealName)) {
+            kcalSum += product.getKcal();
+            fatSum += product.getFats();
+            carbsSum += product.getCarbs();
+            proteinsSum += product.getProteins();
+        }
+        System.out.printf("\n%s:\nKcal: %.2f\nFats: %.2f\nCarbs: %.2f\nProteins: %.2f\n", mealName, kcalSum, fatSum, carbsSum, proteinsSum);
+    }
+
+    protected void gettingDailySum(User tempUser) {
+
+        double kcalSum = 0;
+        double fatSum = 0;
+        double carbsSum = 0;
+        double proteinsSum = 0;
+
+        String[] meals = {"breakfast", "snack", "lunch", "dinner"};
+
+        for (String meal: meals) {
+            for (Product product : tempUser.getMeal(meal)) {
+                kcalSum += product.getKcal();
+                fatSum += product.getFats();
+                carbsSum += product.getCarbs();
+                proteinsSum += product.getProteins();
+            }
+        }
+        System.out.printf("\n%s:\nKcal: %.2f\nFats: %.2f\nCarbs: %.2f\nProteins: %.2f\n","Daily sum", kcalSum, fatSum, carbsSum, proteinsSum);
     }
 
     protected int intValidation() {
