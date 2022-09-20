@@ -1,4 +1,5 @@
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class User {
@@ -11,6 +12,7 @@ public class User {
     private double userFatPercentage;
     private int movementDuration;
     private String userGoal;
+    private LocalDate userRegisterDate;
     private List<Product> breakfast;
     private List<Product> snack;
     private List<Product> lunch;
@@ -22,6 +24,7 @@ public class User {
         this.name = name;
         this.username = username;
         this.userAge = userAge;
+        this.userRegisterDate = LocalDate.now();
         addUserWeight(userWeight);
         addUserHeight(userHeight);
         addUserFatPercentage(userFatPercentage);
@@ -42,6 +45,13 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+    public String  getStringUserRegisterDate() {
+        return userRegisterDate.toString();
+    }
+
+    public LocalDate getUserRegisterDate() {
+        return userRegisterDate;
     }
 
     public double getUserWeight() {

@@ -60,7 +60,7 @@ public class MainPage {
                                     boolean isMainUserMenuOn = true;
                                     while (isMainUserMenuOn) {
 
-                                        LocalDate tempDate = getDate();
+                                        LocalDate tempDate = getDate(tempUser);
                                         String mealName = gettingMealType();
 
                                         if (mealName.equals("out")) {
@@ -155,7 +155,7 @@ public class MainPage {
                                     boolean isOnMealRemoval = true;
 
                                     while (isOnMealRemoval) {
-                                        LocalDate tempProd = getDate();
+                                        LocalDate tempProd = getDate(tempUser);
                                         String mealName = gettingMealType();
                                         if (mealName.equals("out")) {
                                             isOnMealRemoval = false;
@@ -175,7 +175,7 @@ public class MainPage {
                                     // Getting sums
                                     boolean isGettingSumOn = true;
                                     while (isGettingSumOn) {
-                                        LocalDate tempDate = getDate();
+                                        LocalDate tempDate = getDate(tempUser);
 
                                         System.out.println("1. Get sum for all day.\n2. Get sum for every meal.\n3. Go back.");
                                         int userSumChoice = scanner.nextInt();
@@ -391,14 +391,23 @@ public class MainPage {
        return tempProdGrams;
    }
 
-    protected LocalDate getDate() {
+    protected LocalDate getDate(User user) {
+
+        boolean isOn = true;
         Scanner inp = new Scanner(System.in);
-        System.out.print("Please enter the date(ex: 13/09/1999): ");
-        String userInput = inp.nextLine();
-        int day = Integer.parseInt(userInput.substring(0,2));
-        int month = Integer.parseInt(userInput.substring(3,5));
-        int year = Integer.parseInt(userInput.substring(6));
-        return LocalDate.of(year,month,day);
+        while (isOn) {
+            System.out.print("Please enter the date(ex: 13/09/1999): ");
+            String userInput = inp.nextLine();
+            if ((userInput.compareTo(user.getStringUserRegisterDate()) > 0)) {
+                int day = Integer.parseInt(userInput.substring(0, 2));
+                int month = Integer.parseInt(userInput.substring(3, 5));
+                int year = Integer.parseInt(userInput.substring(6));
+                return LocalDate.of(year, month, day);
+            } else {
+                System.out.println("Wrong date");
+            }
+        }
+        return user.getUserRegisterDate();
     }
 
     protected String gettingMealType() {
