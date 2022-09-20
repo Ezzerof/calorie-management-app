@@ -8,6 +8,7 @@ public class MainPage {
 
     private static Set<String> savedUsernames = new HashSet<>();
     Scanner scanner = new Scanner(System.in);
+    User tempUser = null;
 
     public void startApp() {
         boolean isOn = true;
@@ -21,254 +22,11 @@ public class MainPage {
             switch (choice) {
                 // Creating account
                 case 1:
-                    String name = isNameValid();
-                    System.out.println("Welcome, " + name);
-                    String username = isUsernameValid();
-                    int age = isAgeValid();
-                    double weight = isWeightValid();
-                    double height = isHeightValid();
-                    double fatPercentage = isFatPercentageValid();
-                    int exercisesTime = exercisesTimeValidation();
-                    String userGoal = userGoalValidation();
-
-                    User user = new User(name, username, age, weight, height, fatPercentage, exercisesTime, userGoal);
-                    userRepository.addUser(user);
+                    accountCreation();
                     break;
-                    // End of creating account
                 case 2:
                     // Log in to the app
-                    System.out.print("\nPlease enter your username: ");
-                    String input = scanner.next();
-                    if (savedUsernames.contains(input)) {
-
-                        boolean isLoginOn = true;
-                        while (isLoginOn) {
-
-                            tempUser = userRepository.getUserByUsername(input);
-                            System.out.println();
-                            System.out.println("1. Add product/dish to your daily diary.\n" +
-                                    "2. Remove product/dish from your daily diary.\n" +
-                                    "3. Check your daily sum up.\n" +
-                                    "4. Edit profile\n" +
-                                    "5. Log out and go back to main menu.\n");
-                            System.out.print("Please select a function from above: ");
-                            int function = intValidation();
-
-                            switch (function) {
-                                case 1:
-                                    // Adding product or dish to the diary
-                                    boolean isMainUserMenuOn = true;
-                                    while (isMainUserMenuOn) {
-
-                                        LocalDate tempDate = getDate(tempUser);
-                                        String mealName = gettingMealType();
-
-                                        if (mealName.equals("out")) {
-                                            isMainUserMenuOn = false;
-                                        } else if (mealName.equals("error")) {
-                                            System.out.println("Wrong input.");
-                                            isMainUserMenuOn = false;
-                                        }
-
-                                        boolean secondUserMenuOn = true;
-                                        while (secondUserMenuOn) {
-
-                                            System.out.println("\n1. Select existing product/dish from database.\n2. Remove existing product/dish from database\n3. Add new product/dish to database.\n4. Go back");
-                                            System.out.print("Enter the option: ");
-                                            int uChoice = intValidation();
-
-                                            switch (uChoice) {
-                                                // Selecting existing products or dishes from the database
-                                                case 1:
-                                                    int prodNum = choosingProdFromDatabaseList(tempUser);
-                                                    if (prodNum == -1) {
-                                                        break;
-                                                    } else {
-                                                        prodNum -= 1;
-                                                        Product chosenProduct = tempUser.getLOP().get(prodNum);
-
-                                                        System.out.println("Do you want to edit it? (yes or no): ");
-                                                        String strChoice = scanner.next();
-
-                                                        if (strChoice.equals("yes")) {
-
-                                                            System.out.print("\nPlease enter how many grams: ");
-                                                            double grams = doubleValidation();
-
-                                                            // Adding new values to the product
-                                                            gettingNewProdValues(prodNum, grams, tempUser);
-
-                                                        } else if (strChoice.equals("no")) {
-                                                            tempUser.addProductToMeal(chosenProduct, mealName);
-                                                        } else {
-                                                            System.out.println("Wrong input.");
-                                                            break;
-                                                        }
-                                                    }
-
-                                                    break;
-                                                case 2:
-                                                    // Removing products or dishes from the database
-                                                    int prodIndex= choosingProdFromDatabaseList(tempUser);
-                                                    if (prodIndex == -1) {
-                                                        break;
-                                                    } else {
-                                                        prodIndex -= 1;
-                                                        Product chosenProduct = tempUser.getLOP().get(prodIndex);
-                                                        tempUser.getLOP().remove(chosenProduct);
-                                                    }
-
-                                                    break;
-                                                case 3:
-                                                    // Adding a new product to dish to the database
-                                                    System.out.print("Please enter product/dish name: ");
-                                                    String tempProdName = scanner.next();                           // need validation
-                                                    System.out.print("Please enter how many grams: ");
-                                                    double tempProdGrams = doubleValidation();
-                                                    System.out.print("Please enter how many kcal: ");
-                                                    double tempProdKcal = doubleValidation();
-                                                    System.out.print("Please enter how many fats: ");
-                                                    double tempProdFats = doubleValidation();
-                                                    System.out.print("Please enter how many carbs: ");
-                                                    double tempProdCarbs = doubleValidation();
-                                                    System.out.print("Please enter how many proteins: ");
-                                                    double tempProdProteins = doubleValidation();
-
-                                                    Product newProd = new Product(tempProdName, tempDate, tempProdGrams, tempProdKcal, tempProdFats, tempProdCarbs, tempProdProteins);
-                                                    tempUser.addProductToLOP(newProd);
-                                                    break;
-                                                case 4:
-                                                    // Going back to the previous menu
-                                                    secondUserMenuOn = false;
-                                                    isMainUserMenuOn = false;
-                                                    break;
-                                                default:
-                                                    System.out.println("Wrong input.");
-                                                    secondUserMenuOn = false;
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case 2:
-                                    // Removing product or meal from the diary
-                                    boolean isOnMealRemoval = true;
-
-                                    while (isOnMealRemoval) {
-                                        LocalDate tempProd = getDate(tempUser);
-                                        String mealName = gettingMealType();
-                                        if (mealName.equals("out")) {
-                                            isOnMealRemoval = false;
-                                        }
-
-                                        if (tempUser.getAllProductsFormMeal(mealName)) {
-                                            System.out.print("\nPlease enter number of the products/dishes to remove it: ");
-                                            int numberOfMeal = intValidation();
-                                            numberOfMeal -= 1;
-                                            tempUser.getMeal(mealName).remove(numberOfMeal);
-                                        } else {
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                case 3:
-                                    // Getting sums
-                                    boolean isGettingSumOn = true;
-                                    while (isGettingSumOn) {
-                                        LocalDate tempDate = getDate(tempUser);
-
-                                        System.out.println("1. Get sum for all day.\n2. Get sum for every meal.\n3. Go back.");
-                                        int userSumChoice = scanner.nextInt();
-
-                                        switch (userSumChoice) {
-                                            case 1:
-                                                gettingDailySum(tempUser, tempDate);
-                                                break;
-                                            case 2:
-                                                String mealName = gettingMealType();
-
-                                                if (mealName.equals("out")) {
-                                                    isGettingSumOn = false;
-                                                    break;
-                                                }
-
-                                                gettingDailySum(tempUser, mealName, tempDate);
-
-                                                isGettingSumOn = false;
-                                                break;
-                                            case 3:
-                                                isGettingSumOn = false;
-                                                break;
-                                            default:
-                                                System.out.println("Wrong input");
-                                                break;
-                                        }
-                                    }
-
-                                    break;
-                                case 4:
-                                    // Editing user profile
-                                    boolean userProfileMenuOn = true;
-                                    while (userProfileMenuOn) {
-
-                                        System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Edit movement time\n 5. Go back" +
-                                                "\nPlease select from above: ");
-                                        int select = 0;
-                                        try {
-                                            select = scanner.nextInt();
-
-                                        } catch (InputMismatchException e) {
-                                            scanner.nextLine();
-                                        }
-
-                                        switch (select) {
-                                            case 1:
-                                                System.out.println("Your current weight is: " + tempUser.getUserWeight());
-                                                System.out.print("\nPlease enter your new weight: ");
-                                                double newWeight = isWeightValid();
-                                                tempUser.addUserWeight(newWeight);
-                                                System.out.println("Your new weight is: " + tempUser.getUserWeight());
-                                                break;
-                                            case 2:
-                                                System.out.println("Your current height is: " + tempUser.getUserHeight());
-                                                System.out.print("\nPlease enter your new height: ");
-                                                double newHeight = isHeightValid();
-                                                tempUser.addUserHeight(newHeight);
-                                                System.out.println("Your new height is: " + tempUser.getUserHeight());
-                                                break;
-                                            case 3:
-                                                System.out.println("Your current fat percentage is: " + tempUser.getUserFatPercentage() + "%");
-                                                System.out.print("\nPlease enter your new fat percentage: ");
-                                                double newFatPercentage = isFatPercentageValid();
-                                                tempUser.addUserFatPercentage(newFatPercentage);
-                                                System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage() + "%");
-                                                break;
-                                            case 4:
-                                                System.out.println("Your current movement time is: " + tempUser.getUserMovementDuration());
-                                                System.out.print("\nPlease enter your new movement time: ");
-                                                double newMovementTime = exercisesTimeValidation();
-                                                tempUser.addUserFatPercentage(newMovementTime);
-                                                System.out.println("Your new movement time is: " + tempUser.getUserMovementDuration());
-                                                break;
-                                            case 5:
-                                                userProfileMenuOn = false;
-                                            default:
-                                                System.out.println("Wrong input.");
-                                                break;
-                                        }
-                                    }
-                                    break;
-                                case 5:
-                                    // Log out
-                                    tempUser = null;
-                                    isLoginOn = false;
-                                    break;
-                                default:
-                                    System.out.println("You have entered a wrong number.");
-                                    break;
-                            }
-                        }
-                    }
+                    logInToAccount();
                     break;
                 case 3:
                     // Quiting app
@@ -277,6 +35,185 @@ public class MainPage {
                     break;
                 default:
                     System.out.println("Wrong input, please select again.");
+            }
+        }
+    }
+
+    protected void accountCreation() {
+        String name = isNameValid();
+        System.out.println("Welcome, " + name);
+        String username = isUsernameValid();
+        int age = isAgeValid();
+        double weight = isWeightValid();
+        double height = isHeightValid();
+        double fatPercentage = isFatPercentageValid();
+        int exercisesTime = exercisesTimeValidation();
+        String userGoal = userGoalValidation();
+
+        User user = new User(name, username, age, weight, height, fatPercentage, exercisesTime, userGoal);
+        userRepository.addUser(user);
+    }
+
+    protected void logInToAccount() {
+        System.out.print("\nPlease enter your username: ");
+        String input = scanner.next();
+        if (savedUsernames.contains(input)) {
+
+            boolean isLoginOn = true;
+            while (isLoginOn) {
+
+                tempUser = userRepository.getUserByUsername(input);
+                System.out.println();
+                System.out.println("1. Add product/dish to your daily diary.\n" +
+                        "2. Remove product/dish from your daily diary.\n" +
+                        "3. Check your daily sum up.\n" +
+                        "4. Edit profile\n" +
+                        "5. Log out and go back to main menu.\n");
+                System.out.print("Please select a function from above: ");
+                int function = intValidation();
+
+                switch (function) {
+                    case 1:
+                        // Adding product or dish to the diary
+                        addingProductToMeal();
+                        break;
+                    case 2:
+                        // Removing product or meal from the diary
+                        removingProductFromMeal();
+                        break;
+                    case 3:
+                        // Getting sums
+                        getSum();
+                        break;
+                    case 4:
+                        // Editing user profile
+                        editCurrentUser();
+                        break;
+                    case 5:
+                        // Log out
+                        tempUser = null;
+                        isLoginOn = false;
+                        break;
+                    default:
+                        System.out.println("You have entered a wrong number.");
+                        break;
+                }
+            }
+        }
+    }
+
+    protected void addingProductToMeal() {
+        boolean isMainUserMenuOn = true;
+        while (isMainUserMenuOn) {
+
+            LocalDate tempDate = getDate(tempUser);
+            String mealName = gettingMealType();
+
+            if (mealName.equals("out")) {
+                isMainUserMenuOn = false;
+            } else if (mealName.equals("error")) {
+                System.out.println("Wrong input.");
+                isMainUserMenuOn = false;
+            }
+
+            boolean secondUserMenuOn = true;
+            while (secondUserMenuOn) {
+
+                System.out.println("\n1. Select existing product/dish from database.\n2. Remove existing product/dish from database\n3. Add new product/dish to database.\n4. Go back");
+                System.out.print("Enter the option: ");
+                int uChoice = intValidation();
+
+                switch (uChoice) {
+                    // Selecting existing products or dishes from the database
+                    case 1:
+                        int prodNum = choosingProdFromDatabaseList(tempUser);
+                        if (prodNum == -1) {
+                            break;
+                        } else {
+                            prodNum -= 1;
+                            Product chosenProduct = tempUser.getLOP().get(prodNum);
+
+                            System.out.println("Do you want to edit it? (yes or no): ");
+                            String strChoice = scanner.next();
+
+                            if (strChoice.equals("yes")) {
+
+                                System.out.print("\nPlease enter how many grams: ");
+                                double grams = doubleValidation();
+
+                                // Adding new values to the product
+                                gettingNewProdValues(prodNum, grams, tempUser);
+
+                            } else if (strChoice.equals("no")) {
+                                tempUser.addProductToMeal(chosenProduct, mealName);
+                            } else {
+                                System.out.println("Wrong input.");
+                                break;
+                            }
+                        }
+
+                        break;
+                    case 2:
+                        // Removing products or dishes from the database
+                        int prodIndex= choosingProdFromDatabaseList(tempUser);
+                        if (prodIndex == -1) {
+                            break;
+                        } else {
+                            prodIndex -= 1;
+                            Product chosenProduct = tempUser.getLOP().get(prodIndex);
+                            tempUser.getLOP().remove(chosenProduct);
+                        }
+
+                        break;
+                    case 3:
+                        // Adding a new product to dish to the database
+                        System.out.print("Please enter product/dish name: ");
+                        String tempProdName = scanner.next();                           // need validation
+                        System.out.print("Please enter how many grams: ");
+                        double tempProdGrams = doubleValidation();
+                        System.out.print("Please enter how many kcal: ");
+                        double tempProdKcal = doubleValidation();
+                        System.out.print("Please enter how many fats: ");
+                        double tempProdFats = doubleValidation();
+                        System.out.print("Please enter how many carbs: ");
+                        double tempProdCarbs = doubleValidation();
+                        System.out.print("Please enter how many proteins: ");
+                        double tempProdProteins = doubleValidation();
+
+                        Product newProd = new Product(tempProdName, tempDate, tempProdGrams, tempProdKcal, tempProdFats, tempProdCarbs, tempProdProteins);
+                        tempUser.addProductToLOP(newProd);
+                        break;
+                    case 4:
+                        // Going back to the previous menu
+                        secondUserMenuOn = false;
+                        isMainUserMenuOn = false;
+                        break;
+                    default:
+                        System.out.println("Wrong input.");
+                        secondUserMenuOn = false;
+                        break;
+                }
+            }
+        }
+    }
+
+    protected void removingProductFromMeal() {
+        boolean isOnMealRemoval = true;
+
+        while (isOnMealRemoval) {
+            LocalDate tempProd = getDate(tempUser);
+            String mealName = gettingMealType();
+            if (mealName.equals("out")) {
+                isOnMealRemoval = false;
+            }
+
+            if (tempUser.getAllProductsFormMeal(mealName)) {
+                System.out.print("\nPlease enter number of the products/dishes to remove it: ");
+                int numberOfMeal = intValidation();
+                numberOfMeal -= 1;
+                tempUser.getMeal(mealName).remove(numberOfMeal);
+            } else {
+                break;
             }
         }
     }
@@ -295,6 +232,92 @@ public class MainPage {
             prodNum = scanner.nextInt();
         }
         return prodNum;
+    }
+
+    protected void editCurrentUser() {
+        boolean userProfileMenuOn = true;
+        while (userProfileMenuOn) {
+
+            System.out.print("\nEdit profile:\n1. Edit weight\n2. Edit height\n3. Fat percentage\n4. Edit movement time\n 5. Go back" +
+                    "\nPlease select from above: ");
+            int select = 0;
+            try {
+                select = scanner.nextInt();
+
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+            }
+
+            switch (select) {
+                case 1:
+                    System.out.println("Your current weight is: " + tempUser.getUserWeight());
+                    System.out.print("\nPlease enter your new weight: ");
+                    double newWeight = isWeightValid();
+                    tempUser.addUserWeight(newWeight);
+                    System.out.println("Your new weight is: " + tempUser.getUserWeight());
+                    break;
+                case 2:
+                    System.out.println("Your current height is: " + tempUser.getUserHeight());
+                    System.out.print("\nPlease enter your new height: ");
+                    double newHeight = isHeightValid();
+                    tempUser.addUserHeight(newHeight);
+                    System.out.println("Your new height is: " + tempUser.getUserHeight());
+                    break;
+                case 3:
+                    System.out.println("Your current fat percentage is: " + tempUser.getUserFatPercentage() + "%");
+                    System.out.print("\nPlease enter your new fat percentage: ");
+                    double newFatPercentage = isFatPercentageValid();
+                    tempUser.addUserFatPercentage(newFatPercentage);
+                    System.out.println("Your new fat percentage is: " + tempUser.getUserFatPercentage() + "%");
+                    break;
+                case 4:
+                    System.out.println("Your current movement time is: " + tempUser.getUserMovementDuration());
+                    System.out.print("\nPlease enter your new movement time: ");
+                    double newMovementTime = exercisesTimeValidation();
+                    tempUser.addUserFatPercentage(newMovementTime);
+                    System.out.println("Your new movement time is: " + tempUser.getUserMovementDuration());
+                    break;
+                case 5:
+                    userProfileMenuOn = false;
+                default:
+                    System.out.println("Wrong input.");
+                    break;
+            }
+        }
+    }
+
+    protected void getSum() {
+        boolean isGettingSumOn = true;
+        while (isGettingSumOn) {
+            LocalDate tempDate = getDate(tempUser);
+
+            System.out.println("1. Get sum for all day.\n2. Get sum for every meal.\n3. Go back.");
+            int userSumChoice = scanner.nextInt();
+
+            switch (userSumChoice) {
+                case 1:
+                    gettingDailySum(tempUser, tempDate);
+                    break;
+                case 2:
+                    String mealName = gettingMealType();
+
+                    if (mealName.equals("out")) {
+                        isGettingSumOn = false;
+                        break;
+                    }
+
+                    gettingDailySum(tempUser, mealName, tempDate);
+
+                    isGettingSumOn = false;
+                    break;
+                case 3:
+                    isGettingSumOn = false;
+                    break;
+                default:
+                    System.out.println("Wrong input");
+                    break;
+            }
+        }
     }
 
     protected void gettingDailySum(User tempUser, String mealName, LocalDate date) {
