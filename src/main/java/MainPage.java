@@ -430,7 +430,7 @@ public class MainPage {
                 int year = Integer.parseInt(userInput.substring(6));
                 return LocalDate.of(year, month, day);
             } else {
-                System.out.println("Wrong date");
+                System.out.println("Wrong date.");
             }
         }
         return user.getUserRegisterDate();
