@@ -422,16 +422,14 @@ public class MainPage {
         boolean isOn = true;
         Scanner inp = new Scanner(System.in);
         while (isOn) {
-            System.out.print("Please enter the date(ex: 13/09/1999): ");
+            System.out.print("Please enter the date (syntax: DD/MM/YYYY): ");
             String userInput = inp.nextLine();
-            if ((userInput.compareTo(user.getStringUserRegisterDate()) > 0)) {
-                int day = Integer.parseInt(userInput.substring(0, 2));
-                int month = Integer.parseInt(userInput.substring(3, 5));
-                int year = Integer.parseInt(userInput.substring(6));
-                return LocalDate.of(year, month, day);
-            } else {
-                System.out.println("Wrong date.");
-            }
+
+            int day = Integer.parseInt(userInput.substring(0, 2));
+            int month = Integer.parseInt(userInput.substring(3, 5));
+            int year = Integer.parseInt(userInput.substring(6));
+            return LocalDate.of(year, month, day);
+
         }
         return user.getUserRegisterDate();
     }
