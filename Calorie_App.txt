@@ -1,0 +1,62 @@
+1.Create new profile
+2.Log in to existing profile
+3.Quit
+
+
+
+
+
+1. Create new profile
+	0. What is your nickname?	
+	1. What is your age?  
+	2. What is your weights?
+	3. What is your height? 
+	4. What is your fat %?
+	5. What is your weekly average exercise/movement duration?
+	6. What is that you are aiming? (Loose weight, Gain weight, Maintain weight)
+
+
+2. Log in to existing profile
+	1. Add to product/meal to your daily diary.
+	2. Remove product/meal from your daily diary.
+	3. Check your daily sum up.
+	4. Edit profile
+	5. Log out and go back to main menu.
+
+
+	2.1 Add to product/meal to your daily diary.
+		Choose date:  
+		1. Breakfast
+		2. Snack
+		3. Lunch
+		4. Snack
+		5 .Dinner
+		6. Go back
+	2.2 Remove product/meal from your daily diary.
+		Choose date: 
+		1. Breakfast
+		2. Snack
+		3. Lunch
+		4. Snack
+		5 .Dinner
+		6. Go back
+	2.3 Check your daily sum up.
+		Choose date:
+		Print sum for a day (kcal, proteins, fats, carbs)
+		Print sum for each individual meal of choosed day(kcal, proteins, fats, carbs)
+
+	2.4 Profile settings
+		1. Edit body measures
+		2. Delete profile
+
+
+		2.1.1
+		ANY MEAL
+		c
+		
+
+
+		EXAMPLES FOR PRODUCTS
+		white bread, potat, eggs
+
+		white bread in 100g kcal 320, fat 5g, carbohydrates 40g, proteins 3g 
