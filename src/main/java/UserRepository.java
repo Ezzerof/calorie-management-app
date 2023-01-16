@@ -10,12 +10,11 @@ public class UserRepository {
     }
 
     public User getUserByUsername(final String username) {
-        for (User u : existingUsers) {
-            if (u.getUsername().equals(username))
-                return u;
-        }
 
-        return null;
+        return existingUsers.stream()
+                .filter(user -> user.getName().equals(username))
+                .findAny()
+                .orElse(null);
     }
 
 }
