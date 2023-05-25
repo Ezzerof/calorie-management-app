@@ -5,7 +5,8 @@
 * [Setup](#setup)
 
 ## General Info
-Just create an account by entering your name, age, weight, height and fat percentage and start to track your daily nutrition (proteins, carbs, fats, and kcal). 
+
+Simple application that provides login and sing up functionality to store and manage your daily meals. It will help to track your daily nutrition (proteins, carbs, fats, and kcal). 
 
 ## Technologies
 * Java (JDK 8+)
